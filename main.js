@@ -30,6 +30,9 @@ app.get('desktopapi.dankbank.io/authenticate', (req, res) => {
 app.get('desktopapi.dankbank.io/destroyAccount', (req, res) => {
   res.send(accountmanager.destroyAccount(req.query.uuid))
 })
+app.get('desktop.dankbank.io/redditAuth', (req, res) => {
+  res.send(accountmanager.redditAuth(req.query.state, req.query.code))
+})
 
 https.createServer({
     key: fs.readFileSync('./key.pem'),
