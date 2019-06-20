@@ -1,15 +1,18 @@
 const express = require('express');
-const https = require('https');
 const fs = require('fs');
 const app = express()
-const port = 3000
 
 const accountmanager = require("./accountmanager.js")
 
 app.use(function(req, res, next){
   req.headers.host = (req.headers.host.split(".dev.localhost").join(""))
   req.url = req.headers.host + req.url;
-  next(); 
+  next();
+});
+
+app.use(function(req, res, next){
+  console.log(req.url)
+  next();
 });
 
 app.get('localhost/', (req, res) => {
@@ -34,8 +37,8 @@ app.get('desktop.dankbank.io/redditAuth', (req, res) => {
   res.send(accountmanager.redditAuth(req.query.state, req.query.code))
 })
 
-https.createServer({
-    key: fs.readFileSync('./key.pem'),
-    cert: fs.readFileSync('./cert.pem'),
-    passphrase: 'YOUR PASSPHRASE HERE'
-}, app).listen(443, console.log("LISTENING"))
+app.get('*', (req, res) => {
+  res.send("Failed to process your request to: " + req.url)
+})
+
+app.listen(80)
