@@ -25,7 +25,14 @@ app.get('desktopapi.dankbank.io/redditAuth', (req, res) => {
   res.send(accountmanager.redditAuth(req.query.state, req.query.code))
 })
 app.get('desktopapi.dankbank.io/makeAccount', (req, res) => {
-  res.send(accountmanager.makeAccount(req.query.username, req.query.password))
+  if(req.query.email.split("@").length == 2 && req.query.email.split(".").length > 1) {
+    res.send(accountmanager.makeAccount(req.query.username, req.query.password, req.query.email))
+  } else {
+    res.send({
+      "ERROR": "Email Invalid"
+    })
+  }
+
 })
 app.get('desktopapi.dankbank.io/authenticate', (req, res) => {
   res.send(accountmanager.authenticate(req.query.username, req.query.password))

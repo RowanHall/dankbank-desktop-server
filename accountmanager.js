@@ -12,7 +12,23 @@ var redditAuth = (uuid, redditaccount) => {
   return acc[uuid]
 }
 
-var makeAccount = (name, pass) => {
+var nametaken = (username) => {
+  var taken = false;
+  var acc = JSON.parse(fs.readFileSync("./accounts.JSON", 'utf-8'))
+  Object.keys(acc).forEach(uuid => {
+    if(acc[uuid].name == username) {
+      taken = true;
+    }
+  })
+  return taken;
+}
+
+var makeAccount = (name, pass, email) => {
+  if(nametaken(name)) {
+    return {
+      "ERROR": "NAME TAKEN"
+    }
+  }
   var uuid = randomstring.generate({
     length: 63,
     charset: 'alphanumeric'
@@ -20,17 +36,21 @@ var makeAccount = (name, pass) => {
   var acc = JSON.parse(fs.readFileSync("./accounts.JSON", 'utf-8'))
   acc[uuid] = {
     "name": name,
-    "pass": pass
+    "pass": pass,
+    "email": email
   }
   fs.writeFileSync("./accounts.JSON", JSON.stringify(acc, null, 4))
-  return uuid
+  return {
+    "ERROR": -1,
+    "uuid": uuid
+  }
 }
 
 var authenticate = (name, pass) => {
   var acc = JSON.parse(fs.readFileSync("./accounts.JSON", 'utf-8'))
   var ret;
   Object.keys(acc).forEach(uuid => {
-    if(acc[uuid] == name && acc[uuid] == pass) {
+    if(acc[uuid].name == name && acc[uuid].pass == pass) {
       ret = uuid;
     }
   })
