@@ -1,10 +1,29 @@
 const express = require('express');
+var cookieParser = require('cookie-parser')
+const request = require('request-promise').defaults({ json: true, baseUrl: 'https://www.reddit.com/api/v1/' })
 const fs = require('fs');
 const app = express()
+app.use(cookieParser())
 var socketsbyuuid = {};
-var snoosbyuuid = {}
+var snoosbyuuid = {};
+global.loops = {};
 const accountmanager = require("./accountmanager.js")
 const fetch = require('node-fetch');
+const FormData = require('form-data');
+const chalk = require('chalk');
+const uuidv4 = require('uuid/v4')
+const requestregular = require('request');
+
+function sort_by_key(array, key)
+{
+ return array.sort(function(a, b)
+ {
+  var x = a[key]; var y = b[key];
+  return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+ });
+}
+
+global.posthistory = {}
 
 app.use(function(req, res, next){
   req.headers.host = (req.headers.host.split(".dev.localhost").join(""))
@@ -13,33 +32,55 @@ app.use(function(req, res, next){
 });
 
 app.use(function(req, res, next){
-  console.log(req.url)
+  console.log(chalk.red("S <H- B"), chalk.blue(req.url))
+  console.log(chalk.green("S -H> B"), chalk.blue(req.url))
   next();
 });
 
-app.get('localhost/', (req, res) => {
-  res.send("REG")
+app.get('dankbank.io/', (req, res) => {
+  res.sendFile(__dirname + "/HTML/HOME/index.html")
 })
+app.get('dankbank.io/home.css', (req, res) => {
+  res.sendFile(__dirname + "/HTML/HOME/index.css")
+})
+app.get('dankbank.io/CDN/logo_outline.png', (req, res) => {
+  res.sendFile(__dirname + "/CDN/logo_outline.png")
+})
+app.get('dankbank.io/CDN/laptop.png', (req, res) => {
+  res.sendFile(__dirname + "/CDN/laptop.png")
+})
+app.get('dankbank.io/CDN/phone.png', (req, res) => {
+  res.sendFile(__dirname + "/CDN/phone.png")
+})
+app.get('dankbank.io/CDN/devices.png', (req, res) => {
+  res.sendFile(__dirname + "/CDN/devices.png")
+})
+
+app.get('web.dankbank.io/', (req, res) => {
+  console.log('Cookies: ', req.cookies)
+  res.sendFile(__dirname + "/HTML/frontend/login/index.html")
+})
+
 app.get('desktopapi.dankbank.io/getAccount', (req, res) => {
   res.send(accountmanager.getAccount(req.query.uuid))
 })
 app.get('desktopapi.dankbank.io/redditAuth', async (req, res) => {
-  var postdata = {
-    "method": "POST",
-    'headers': {
-      'User-Agent': 'DankBank Server',
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + Buffer.from("N29L0e4LMXnJLA" + ":" + "vior6LJQ2kkQwp6SS9GRxdyKuV8").toString('base64')
-    },
-    "body": `grant_type=authorization_code&code=${req.query.code}&redirect_uri=http://desktopapi.dankbank.io/redditAuth`
+  if(req.query.code) {
+    console.log(chalk.green("S -R> R"), chalk.blue(`acsess_token('${req.query.code}')`))
+    var d = await request.post({
+      uri: 'access_token',
+      auth: { user: "s05eekpXEMDenA", pass: "BOGCDA_bD1hAaUQsQ5xuAD4LYQ8" || '' },
+      form: { grant_type: 'authorization_code', code: req.query.code, redirect_uri: "http://desktopapi.dankbank.io.dev.localhost/redditAuth" },
+    })
+    console.log(chalk.red("S <R- R"), chalk.blue(`acsess_token('${req.query.code}')`))
+    accountmanager.redditAuth(req.query.state, d.refresh_token)
+    redditAuthed(socketsbyuuid[req.query.state], req.query.state, (snoo) => {
+      snoosbyuuid[req.query.state] = snoo
+      res.sendFile(__dirname + "/HTML/AUTH/index.html")
+    })
+  } else {
+    res.sendFile(__dirname + "/HTML/AUTH/failed.html")
   }
-  var c = await fetch('https://www.reddit.com/api/v1/access_token', postdata)
-  var d = await c.json()
-  console.log(d, postdata)
-  redditAuthed(socketsbyuuid[req.query.state], req.query.state, (snoo) => {
-    snoosbyuuid[req.query.state] = snoo
-    res.send(accountmanager.redditAuth(req.query.state, d['refresh_token']))
-  })
 })
 app.get('desktopapi.dankbank.io/makeAccount', (req, res) => {
   if(req.query.email.split("@").length == 2 && req.query.email.split(".").length > 1) {
@@ -91,10 +132,24 @@ const interval = setInterval(function ping() {
 }, 10000);
 
 wss.on('connection', function connection(ws) {
+  ws.___send = ws.send
+  ws.send = (data) => {
+    if(ws.readyState == ws.OPEN) {
+      ws.___send(data)
+      console.log(chalk.green("S -W> C"), chalk.blue(JSON.parse(data).type))
+    } else {
+      if(global.loops[ws.selfuuid]) {
+        console.log("USER DEAD. KILLING LOOP")
+        clearInterval(global.loops[ws.selfuuid])
+      }
+    }
+  } 
+  ws.selfuuid = uuidv4();
   ws.on('message', function incoming(message) {
     try {
       var data = JSON.parse(message)
       if(!ws.data) {ws.data = {}}
+      console.log(chalk.red("S <W- C"), chalk.blue(data.type))
       emitter.emit(data.type, ws, data.data, (data) => {
         ws.data = data
       });
@@ -125,21 +180,89 @@ const options = {
   username: "SoLoDas",
   password: "rowanfully"
 };
-const r = new snoowrap(options);
-const s = new snoostorm(r);
-const submissions = s.Stream("submission", {
-  subreddit: "MemeEconomy",
-  pollTime: 2500
-});
-submissions.on("item", item => {
-  //console.log(JSON.parse(JSON.stringify(item)))
-  wss.clients.forEach(ws => {
-    ws.send(JSON.stringify({
-      "type": "submission",
-      "data": item
-    }))
+console.log(chalk.green("S -R> R"), chalk.blue(`authenticate('${"SoLoDas" + " : " + "rowanfully"}')`))
+global.gr = new snoowrap(options);
+console.log(chalk.red("S <R- R"), chalk.blue(`authenticate('${"SoLoDas" + " : " + "rowanfully"}')`))
+var formatData = (arr) => {
+  var obj = {}
+  arr.forEach(item => {
+    obj[item.id] = item
   })
-});
+  return obj
+}
+var aaz = () => {
+  global.oktocallazz = false;
+  var updateObjectBlock = [];
+  console.log(chalk.green("S -R> R"), chalk.blue(`getSubreddit('MemeEconomy')`))
+  global.gr.getSubreddit('MemeEconomy').getNew({
+    'limit': 1000
+  }).then((data) => {
+    global.oktocallazz = true;
+    console.log(chalk.red("S <R- R"), chalk.blue(`getSubreddit('MemeEconomy')`))
+    data = formatData(data)
+    
+    if(global.olddata) {
+      
+      Object.keys(data).forEach(newkey => {
+        var neww = data[newkey];
+        
+        if(global.posthistory[newkey]) {
+          global.posthistory[newkey].time.push(Date.now())
+          global.posthistory[newkey].values.push(neww.score)
+        } else {
+          global.posthistory[newkey] = {
+            'time': [],
+            'values': []
+          }
+          global.posthistory[newkey].time.push(Date.now())
+          global.posthistory[newkey].values.push(neww.score)
+        }
+        global.posthistory[newkey].current = neww;
+        
+        
+        var old = global.olddata[newkey]
+        if(old) {
+          
+          var hasUpdated = false;
+          var updateObject = {
+            "id": newkey
+          }
+          updateObject.newScore = neww.score
+          updateObject.newComment = neww.comment
+          updateObjectBlock.push(updateObject)
+          
+        } else {
+          wss.clients.forEach(ws => {
+            ws.send(JSON.stringify({
+              "type": "submission",
+              "data": data[newkey]
+            }))
+          })
+        }
+      })
+      
+    }
+    
+    global.olddata = data
+    wss.clients.forEach(ws => {
+      ws.send(JSON.stringify({
+        "type": "update",
+        "data": updateObjectBlock
+      }))
+    })
+    fs.writeFileSync("./posthistory.JSON", JSON.stringify(global.posthistory))
+  })
+  
+}
+aaz()
+global.oktocallazz = true;
+setInterval(() => {
+  aaz();
+}, 15000)
+
+Object.defineProperty(Array.prototype, 'chunk', {value: function(n) {
+    return Array.from(Array(Math.ceil(this.length/n)), (_,i)=>this.slice(i*n,i*n+n));
+}});
 
 emitter.on('authenticate', (ws, inputdata, ret) => {
   var data = ws.data
@@ -156,7 +279,7 @@ emitter.on('authenticate', (ws, inputdata, ret) => {
       } else {
         ws.send(JSON.stringify({
           "type": "openURL",
-          "data": "https://www.reddit.com/api/v1/authorize?client_id=s05eekpXEMDenA&response_type=code&state=" + inputdata.uuid + "&redirect_uri=http://desktopapi.dankbank.io/redditAuth&duration=permanent&scope=identity%20read%20submit%20vote"
+          "data": "https://www.reddit.com/api/v1/authorize?client_id=s05eekpXEMDenA&response_type=code&state=" + inputdata.uuid + "&redirect_uri=http://desktopapi.dankbank.io.dev.localhost/redditAuth&duration=permanent&scope=identity%20read%20submit%20vote%20edit"
         }))
       }
     } else {
@@ -185,45 +308,288 @@ redditAuthed = (ws, uuid, cb) => {
       clientSecret: 'BOGCDA_bD1hAaUQsQ5xuAD4LYQ8',
       refreshToken: token
     }
-    console.log(cfg)
+    console.log(chalk.green("S -R> R"), chalk.blue(`authenticate('${token}')`))
     const r = new snoowrap(cfg);
+    console.log(chalk.red("S <R- R"), chalk.blue(`authenticate('${token}')`))
     cb(r)
-    r.getSubreddit('MemeEconomy').getNew().then((data) => {
+    //get new posts
+    // TODO: REPLACE WITH OBJECT RESPONSE
+    var c = [];
+    try {
+      Object.keys(global.olddata).forEach(item => {
+        c.push(global.olddata[item])
+      })
+    } catch(err) {}
+    c = sort_by_key(c, 'created_utc').reverse()
+    ws.send(JSON.stringify({
+      "type": "batchMemedata",
+      "data": c.chunk(40)[0]
+    }))
+    
+    var r11 = async (self) => {
+      console.log(chalk.green("S -R> M"), chalk.blue(`getInvestor('${self.name}')`))
+      var d = await fetch("https://meme.market/api/investor/" + self.name)
+      console.log(chalk.red("S <R- M"), chalk.blue(`getInvestor('${self.name}')`))
+      var cRAW = await d.text()
+      try {
+        var c = JSON.parse(cRAW)
+      } catch(err) {
+        console.log(cRAW)
+      }
+      console.log(chalk.green("S -R> M"), chalk.blue(`getFirms('${c.firm}')`))
+      var d2 = await fetch("https://meme.market/api/firm/" + c.firm)
+      console.log(chalk.red("S <R- M"), chalk.blue(`getFirms('${c.firm}')`))
+      var cRAW2 = await d2.text()
+      try {
+        var c2 = JSON.parse(cRAW2)
+      } catch(err) {
+        console.log(cRAW2)
+      }
+      var data = c
       ws.send(JSON.stringify({
-        "type": "batchMemedata",
-        "data": data
-      }))
-    })
-    setInterval(() => {
-      r.getMe().then(async (self) => {
-        var d = await fetch("https://meme.market/api/investor/" + self.name)
-        var c = await d.json()
-        var data = c
-        ws.send(JSON.stringify({
-          "type": "batchSelfData",
-          "data": {
-            "reddit": self,
-            "memeec": data
-          }
-        }));
+        "type": "batchSelfData",
+        "data": {
+          "reddit": self,
+          "memeec": data,
+          "firm": c2
+        }
+      }));
+      var fulldata = [];
+      var finished = false
+      for(var page = 0; !finished; page++) {
+        console.log(chalk.green("S -R> M"), chalk.blue(`getInvestor('${self.name}').investments({'page': ${page}})`))
+        var c = await fetch("https://meme.market/api/investor/" + self.name + "/investments?per_page=100&page=" + page)
+        console.log(chalk.red("S <R- M"), chalk.blue(`getInvestor('${self.name}').investments({'page': ${page}})`))
+        var xRAW = (await c.text())
+        try {
+          var d = JSON.parse(xRAW)
+        } catch(err) {
+          console.log(xRAW)
+        }
+        if(d.length == 0) {
+          finished = true
+        } else {
+          fulldata = fulldata.concat(d);
+        }
+      }
+      ws.send(JSON.stringify({
+        "type": "batchInvestments",
+        "data": fulldata
+      }));
+      
+      if(data.firm != 0) {
         var fulldata = [];
         var finished = false
         for(var page = 0; !finished; page++) {
-          var c = await fetch("https://meme.market/api/investor/" + self.name + "?per_page=100&page=" + page)
+          console.log(chalk.green("S -R> M"), chalk.blue(`getFirms('${data.firm}').members({'page': ${page}})`))
+          var c = await fetch("https://meme.market/api/firm/" + data.firm + "/members?per_page=100&page=" + page)
+          console.log(chalk.red("S <R- M"), chalk.blue(`getFirms('${data.firm}').members({'page': ${page}})`))
           var d = await c.json()
-          if(d == []) {
+          if(d.length == 0) {
             finished = true
           } else {
             fulldata = fulldata.concat(d);
           }
         }
         ws.send(JSON.stringify({
-          "type": "batchInvestments",
+          "type": "batchFirmUsers",
           "data": fulldata
         }));
-      })
-    }, 10000)
+      }
+    
+    }
+    console.log(chalk.green("S -R> R"), chalk.blue(`getMe()`))
+    r.getMe().then(async (self) => {
+      console.log(chalk.red("S <R- R"), chalk.blue(`getMe()`))
+      r11(self)
+      global.loops[ws.selfuuid] = setInterval(() => {r11(self)}, 10000)
+    })
   } else {
     cb()
   }
 }
+
+emitter.on('getPagePosts', (ws, inputdata) => {
+  var c = [];
+  try {
+    Object.keys(global.olddata).forEach(item => {
+      c.push(global.olddata[item])
+    })
+  } catch(err) {}
+  c = sort_by_key(c, 'created_utc').reverse()
+  ws.send(JSON.stringify({
+    "type": "batchMemedata",
+    "data": c.chunk(40)[parseInt(inputdata)]
+  }))
+})
+
+emitter.on('getUpvoteHistory', (ws, data) => {
+  ws.send(JSON.stringify({
+    "type": "responseTo:" + data.uuid,
+    "data": global.posthistory[data.id]
+  }))
+})
+
+emitter.on('getFirmList', async (ws, dataGL) => {
+  var fulldata = [];
+  var finished = false
+  for(var page = 0; !finished; page++) {
+    console.log(chalk.green("S -R> M"), chalk.blue(`getFirms().top({'page': ${page}})`))
+    var c = await fetch("https://meme.market/api/firms/top?per_page=100&page=" + page)
+    console.log(chalk.red("S <R- M"), chalk.blue(`getFirms().top({'page': ${page}})`))
+    var xRAW = (await c.text())
+    try {
+      var d = JSON.parse(xRAW)
+    } catch(err) {
+      console.log(xRAW)
+    }
+    if(d.length == 0) {
+      finished = true
+    } else {
+      fulldata = fulldata.concat(d);
+    }
+  }
+  ws.send(JSON.stringify({
+    "type": "responseTo:" + dataGL.uuid,
+    "data": fulldata
+  }));
+})
+
+emitter.on('getUser', async (ws, dataGL) => {
+  var self = {
+    "name": dataGL.id
+  }
+    console.log(chalk.green("S -R> M"), chalk.blue(`getInvestor('${self.name}')`))
+    var d = await fetch("https://meme.market/api/investor/" + self.name)
+    console.log(chalk.red("S <R- M"), chalk.blue(`getInvestor('${self.name}')`))
+    var cRAW = await d.text()
+    try {
+      var c = JSON.parse(cRAW)
+    } catch(err) {
+      console.log(cRAW)
+    }
+    console.log(chalk.green("S -R> M"), chalk.blue(`getFirm('${c.firm}')`))
+    var d2 = await fetch("https://meme.market/api/firm/" + c.firm)
+    console.log(chalk.red("S <R- M"), chalk.blue(`getFirm('${c.firm}')`))
+    var cRAW2 = await d2.text()
+    try {
+      var c2 = JSON.parse(cRAW2)
+    } catch(err) {
+      console.log(cRAW2)
+    }
+    var data = c
+    var fulldata = [];
+    var finished = false
+    for(var page = 0; !finished; page++) {
+      console.log(chalk.green("S -R> M"), chalk.blue(`getInvestor('${self.name}').investments({'page': ${page}})`))
+      var c = await fetch("https://meme.market/api/investor/" + self.name + "/investments?per_page=100&page=" + page)
+      console.log(chalk.red("S <R- M"), chalk.blue(`getInvestor('${self.name}').investments({'page': ${page}})`))
+      var xRAW = (await c.text())
+      try {
+        var d = JSON.parse(xRAW)
+      } catch(err) {
+        console.log(xRAW)
+      }
+      if(d.length == 0) {
+        finished = true
+      } else {
+        fulldata = fulldata.concat(d);
+      }
+    }
+    ws.send(JSON.stringify({
+      "type": "responseTo:" + dataGL.uuid,
+      "data": {
+        "reddit": self,
+        "memeec": data,
+        "firm": c2,
+        "investments": fulldata
+      }
+    }));
+})
+
+emitter.on('InvestMeme', (ws, investmentdata) => {
+  
+  //use the reddit API to invest into the meme stored in investmentdata.id
+  
+  console.log(chalk.green("S -R> R"), chalk.blue(`getSubmission('${investmentdata.id}')`))
+  snoosbyuuid[ws.data.uuid].getSubmission(investmentdata.id).expandReplies({
+    "limit": 1
+  }).then((data) => {
+    console.log(chalk.red("S <R- R"), chalk.blue(`getSubmission('${investmentdata.id}')`))
+    console.log(chalk.green("S -R> R"), chalk.blue(`reply('${investmentdata.id}')`))
+    data.comments[0].reply("!invest " + investmentdata.investAmount + '%').then((post) => {
+      console.log(chalk.red("S <R- R"), chalk.blue(`reply('${investmentdata.id}')`))
+      setTimeout(() => {
+        console.log(chalk.green("S -R> R"), chalk.blue(`edit('${post.id}')`))
+        post.edit('!invest ' + investmentdata.investAmount + '%\n\n>Invested with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
+          console.log(chalk.red("S <R- R"), chalk.blue(`edit('${post.id}')`))
+        })
+      }, 25000)
+      ws.send(JSON.stringify({
+        "type": "responseTo:" + investmentdata.uuid,
+        "data": {}
+      }));
+    })
+  })
+  
+  
+  
+})
+
+emitter.on('joinFirm', (ws, investmentdata) => {
+  
+  //use the reddit API to join the firm.
+  
+  console.log(chalk.green("S -R> R"), chalk.blue(`getSubreddit('MemeEconomy')`))
+  snoosbyuuid[ws.data.uuid].getSubreddit('memeeconomy').getHot().then(data => {
+    console.log(chalk.red("S <R- R"), chalk.blue(`getSubreddit('MemeEconomy')`))
+    console.log(chalk.green("S -R> R"), chalk.blue(`getSubmission('${data[0].id}')`))
+    var dataold = data;
+    snoosbyuuid[ws.data.uuid].getSubmission(data[0].id).expandReplies({
+      "limit": 1
+    }).then((data) => {
+      console.log(chalk.red("S <R- R"), chalk.blue(`getSubmission('${dataold[0].id}')`))
+      console.log(chalk.green("S -R> R"), chalk.blue(`comment('${data.comments[0].id}')`))
+      data.comments[0].reply("!joinfirm " + investmentdata.id).then((post) => {
+        console.log(chalk.red("S <R- R"), chalk.blue(`comment('${data.comments[0].id}')`))
+        setTimeout(() => {
+          console.log(chalk.green("S -R> R"), chalk.blue(`edit('${post.id}')`))
+          post.edit('!joinfirm ' + investmentdata.id + '\n\n>Firm left with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
+            console.log(chalk.red("S <R- R"), chalk.blue(`edit('${post.id}')`))
+          })
+        }, 25000)
+        ws.send(JSON.stringify({
+          "type": "responseTo:" + investmentdata.uuid,
+          "data": {}
+        }));
+      })
+    })
+  })
+  
+  
+  
+})
+
+emitter.on('leaveFirm', (ws, investmentdata) => {
+  
+  //use the reddit API to join the firm.
+  
+  snoosbyuuid[ws.data.uuid].getSubreddit('memeeconomy').getNew().then(data => {
+    snoosbyuuid[ws.data.uuid].getSubmission(data[0].id).expandReplies({
+      "limit": 1
+    }).then((data) => {
+      data.comments[0].reply("!leavefirm").then((post) => {
+        setTimeout(() => {
+          post.edit('!leavefirm \n\n>Firm joined with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.')
+        }, 25000)
+        ws.send(JSON.stringify({
+          "type": "responseTo:" + investmentdata.uuid,
+          "data": {}
+        }));
+      })
+    })
+  })
+  
+  
+  
+})

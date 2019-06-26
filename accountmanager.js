@@ -5,9 +5,10 @@ var getAccount = (uuid) => {
   return JSON.parse(fs.readFileSync("./accounts.JSON", 'utf-8'))[uuid]
 }
 
-var redditAuth = (uuid, redditaccount) => {
+var redditAuth = (uuid, redditaccount, grant) => {
   var acc = JSON.parse(fs.readFileSync("./accounts.JSON", 'utf-8'))
   acc[uuid].reddit = redditaccount;
+  acc[uuid].redditgrant = grant
   fs.writeFileSync("./accounts.JSON", JSON.stringify(acc, null, 4))
   return acc[uuid]
 }

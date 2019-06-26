@@ -1,0 +1,32 @@
+@import url("https://fonts.googleapis.com/css?family=Google+Sans:100,300,400,500,700,900,100i,300i,400i,500i,700i,900i");
+* {
+  border: 0px;
+  margin: 0px;
+  font-family: "Google Sans", sans-serif;
+  color: #fff;
+}
+html {
+  background-color: #111112;
+}
+nav {
+  height: 75px;
+  width: 100vw;
+  background-color: rgba(255,255,255, 0.1);
+}
+.logo_top_left_wrapper {
+  float: left;
+  width: 350px;
+  height: 75px;
+  border-right: 2px solid rgba(255,255,255, 0.1);
+}
+.logo_top_left {
+  align-self: center;
+  width: 75px;
+  height: 75px;
+  filter: #fff;
+}
+.title {
+  font-size: 48px;
+  position: relative;
+  top: -20px;
+}
