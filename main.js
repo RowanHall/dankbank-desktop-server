@@ -96,6 +96,18 @@ app.get('webapi.dankbank.io/authenticate', (req, res) => {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.send(accountmanager.authenticate(req.query.username, req.query.password))
 })
+app.get('webapi.dankbank.io/makeAccount', (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  if(req.query.email.split("@").length == 2 && req.query.email.split(".").length > 1) {
+    var z = accountmanager.makeAccount(req.query.username, req.query.password, req.query.email)
+    res.send(z)
+  } else {
+    res.send({
+      "ERROR": "Email Invalid"
+    })
+  }
+})
 app.get('web.dankbank.io/', (req, res) => {
   if(req.cookies.uuid) {
     res.redirect("home")
@@ -125,6 +137,20 @@ app.get('web.dankbank.io/login/index.css', (req, res) => {
 })
 app.get('web.dankbank.io/login/index.js', (req, res) => {
   res.sendFile(__dirname + "/HTML/login/index.js")
+})
+app.get('web.dankbank.io/createaccount', (req, res) => {
+  if(req.query.uuid) {
+    res.cookie("uuid", req.query.uuid)
+    res.redirect("home")
+  } else {
+    res.sendFile(__dirname + "/HTML/createaccount/index.html")
+  }
+})
+app.get('web.dankbank.io/createaccount/index.css', (req, res) => {
+  res.sendFile(__dirname + "/HTML/createaccount/index.css")
+})
+app.get('web.dankbank.io/createaccount/index.js', (req, res) => {
+  res.sendFile(__dirname + "/HTML/createaccount/index.js")
 })
 app.get('web.dankbank.io/home', (req, res) => {
   res.sendFile(__dirname + "/HTML/apphome/index.html")
