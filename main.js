@@ -581,7 +581,109 @@ emitter.on('leaveFirm', (ws, investmentdata) => {
     }).then((data) => {
       data.comments[0].reply("!leavefirm").then((post) => {
         setTimeout(() => {
-          post.edit('!leavefirm \n\n>Firm joined with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.')
+          post.edit('!leavefirm \n\n>Firm left with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.')
+        }, 25000)
+        ws.send(JSON.stringify({
+          "type": "responseTo:" + investmentdata.uuid,
+          "data": {}
+        }));
+      })
+    })
+  })
+  
+  
+  
+})
+
+emitter.on('kickUser', (ws, investmentdata) => {
+  
+  //use the reddit API to join the firm.
+  
+  console.log(chalk.green("S -R> R"), chalk.blue(`getSubreddit('MemeEconomy')`))
+  snoosbyuuid[ws.data.uuid].getSubreddit('memeeconomy').getHot().then(data => {
+    console.log(chalk.red("S <R- R"), chalk.blue(`getSubreddit('MemeEconomy')`))
+    console.log(chalk.green("S -R> R"), chalk.blue(`getSubmission('${data[0].id}')`))
+    var dataold = data;
+    snoosbyuuid[ws.data.uuid].getSubmission(data[0].id).expandReplies({
+      "limit": 1
+    }).then((data) => {
+      console.log(chalk.red("S <R- R"), chalk.blue(`getSubmission('${dataold[0].id}')`))
+      console.log(chalk.green("S -R> R"), chalk.blue(`comment('${data.comments[0].id}')`))
+      data.comments[0].reply("!fire " + investmentdata.id).then((post) => {
+        console.log(chalk.red("S <R- R"), chalk.blue(`comment('${data.comments[0].id}')`))
+        setTimeout(() => {
+          console.log(chalk.green("S -R> R"), chalk.blue(`edit('${post.id}')`))
+          post.edit('!fire ' + investmentdata.id + '\n\n>User kicked with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
+            console.log(chalk.red("S <R- R"), chalk.blue(`edit('${post.id}')`))
+          })
+        }, 25000)
+        ws.send(JSON.stringify({
+          "type": "responseTo:" + investmentdata.uuid,
+          "data": {}
+        }));
+      })
+    })
+  })
+  
+  
+  
+})
+
+emitter.on('promoteUser', (ws, investmentdata) => {
+  
+  //use the reddit API to join the firm.
+  
+  console.log(chalk.green("S -R> R"), chalk.blue(`getSubreddit('MemeEconomy')`))
+  snoosbyuuid[ws.data.uuid].getSubreddit('memeeconomy').getHot().then(data => {
+    console.log(chalk.red("S <R- R"), chalk.blue(`getSubreddit('MemeEconomy')`))
+    console.log(chalk.green("S -R> R"), chalk.blue(`getSubmission('${data[0].id}')`))
+    var dataold = data;
+    snoosbyuuid[ws.data.uuid].getSubmission(data[0].id).expandReplies({
+      "limit": 1
+    }).then((data) => {
+      console.log(chalk.red("S <R- R"), chalk.blue(`getSubmission('${dataold[0].id}')`))
+      console.log(chalk.green("S -R> R"), chalk.blue(`comment('${data.comments[0].id}')`))
+      data.comments[0].reply("!promote " + investmentdata.id).then((post) => {
+        console.log(chalk.red("S <R- R"), chalk.blue(`comment('${data.comments[0].id}')`))
+        setTimeout(() => {
+          console.log(chalk.green("S -R> R"), chalk.blue(`edit('${post.id}')`))
+          post.edit('!promote ' + investmentdata.id + '\n\n>User promoted with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
+            console.log(chalk.red("S <R- R"), chalk.blue(`edit('${post.id}')`))
+          })
+        }, 25000)
+        ws.send(JSON.stringify({
+          "type": "responseTo:" + investmentdata.uuid,
+          "data": {}
+        }));
+      })
+    })
+  })
+  
+  
+  
+})
+
+emitter.on('demoteUser', (ws, investmentdata) => {
+  
+  //use the reddit API to join the firm.
+  
+  console.log(chalk.green("S -R> R"), chalk.blue(`getSubreddit('MemeEconomy')`))
+  snoosbyuuid[ws.data.uuid].getSubreddit('memeeconomy').getHot().then(data => {
+    console.log(chalk.red("S <R- R"), chalk.blue(`getSubreddit('MemeEconomy')`))
+    console.log(chalk.green("S -R> R"), chalk.blue(`getSubmission('${data[0].id}')`))
+    var dataold = data;
+    snoosbyuuid[ws.data.uuid].getSubmission(data[0].id).expandReplies({
+      "limit": 1
+    }).then((data) => {
+      console.log(chalk.red("S <R- R"), chalk.blue(`getSubmission('${dataold[0].id}')`))
+      console.log(chalk.green("S -R> R"), chalk.blue(`comment('${data.comments[0].id}')`))
+      data.comments[0].reply("!demote " + investmentdata.id).then((post) => {
+        console.log(chalk.red("S <R- R"), chalk.blue(`comment('${data.comments[0].id}')`))
+        setTimeout(() => {
+          console.log(chalk.green("S -R> R"), chalk.blue(`edit('${post.id}')`))
+          post.edit('!demote ' + investmentdata.id + '\n\n>User demoted with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
+            console.log(chalk.red("S <R- R"), chalk.blue(`edit('${post.id}')`))
+          })
         }, 25000)
         ws.send(JSON.stringify({
           "type": "responseTo:" + investmentdata.uuid,
