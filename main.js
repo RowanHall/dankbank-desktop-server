@@ -91,6 +91,11 @@ app.get('desktopapi.dankbank.io/makeAccount', (req, res) => {
 app.get('desktopapi.dankbank.io/authenticate', (req, res) => {
   res.send(accountmanager.authenticate(req.query.username, req.query.password))
 })
+app.get('webapi.dankbank.io/authenticate', (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.send(accountmanager.authenticate(req.query.username, req.query.password))
+})
 app.get('web.dankbank.io/', (req, res) => {
   if(req.cookies.uuid) {
     res.redirect("home")
@@ -107,9 +112,102 @@ app.get('web.dankbank.io/notauthed/index.css', (req, res) => {
 app.get('web.dankbank.io/notauthed/index.js', (req, res) => {
   res.sendFile(__dirname + "/HTML/notauthed/index.js")
 })
+app.get('web.dankbank.io/login', (req, res) => {
+  if(req.query.uuid) {
+    res.cookie("uuid", req.query.uuid)
+    res.redirect("home")
+  } else {
+    res.sendFile(__dirname + "/HTML/login/index.html")
+  }
+})
+app.get('web.dankbank.io/login/index.css', (req, res) => {
+  res.sendFile(__dirname + "/HTML/login/index.css")
+})
+app.get('web.dankbank.io/login/index.js', (req, res) => {
+  res.sendFile(__dirname + "/HTML/login/index.js")
+})
+app.get('web.dankbank.io/home', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/index.html")
+})
+app.get('web.dankbank.io/home/index.css', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/index.css")
+})
+app.get('web.dankbank.io/home/index.js', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/index.js")
+})
+app.get('web.dankbank.io/home/index2.js', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/index2.js")
+})
+app.get('web.dankbank.io/home/Chart.js', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/Chart.js")
+})
+app.get('web.dankbank.io/home/ChartModern.js', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/ChartModern.js")
+})
+app.get('web.dankbank.io/home/Luminous.js', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/Luminous.js")
+})
+app.get('web.dankbank.io/home/nextpayout.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/nextpayout.svg")
+})
+app.get('web.dankbank.io/home/members.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/members.svg")
+})
+app.get('web.dankbank.io/home/tax.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/tax.svg")
+})
+app.get('web.dankbank.io/home/visibility.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/visibility.svg")
+})
+app.get('web.dankbank.io/home/level.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/level.svg")
+})
+app.get('web.dankbank.io/home/leave.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/leave.svg")
+})
+app.get('web.dankbank.io/home/leave0.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/leave0.svg")
+})
+app.get('web.dankbank.io/home/bal.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/bal.svg")
+})
+app.get('web.dankbank.io/home/upvotes.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/upvotes.svg")
+})
+app.get('web.dankbank.io/home/breakeven.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/breakeven.svg")
+})
+app.get('web.dankbank.io/home/maxprofit.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/maxprofit.svg")
+})
+app.get('web.dankbank.io/home/firm.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/firm.svg")
+})
+app.get('web.dankbank.io/home/bal.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/bal.svg")
+})
+app.get('web.dankbank.io/home/level.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/level.svg")
+})
+app.get('web.dankbank.io/home/bank.jpg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/bank.jpg")
+})
+app.get('web.dankbank.io/home/clock.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/clock.svg")
+})
+app.get('web.dankbank.io/home/kickuser.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/kickuser.svg")
+})
+app.get('web.dankbank.io/home/promoteuser.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/promoteuser.svg")
+})
+app.get('web.dankbank.io/home/demoteuser.svg', (req, res) => {
+  res.sendFile(__dirname + "/HTML/apphome/demoteuser.svg")
+})
+
 
 app.get('*', (req, res) => {
-  res.send("Failed to process your request to: " + req.url)
+  res.status(404).send("Failed to process your request to: " + req.url)
 })
 
 app.listen(80)

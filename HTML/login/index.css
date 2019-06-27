@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Google+Sans:100,300,400,500,700,900,100i,300i,400i,500i,700i,900i");
 body {
-  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("./0.jpeg");
+  background:linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("http://dankbank.io/CDN/buildings.jpeg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: center;

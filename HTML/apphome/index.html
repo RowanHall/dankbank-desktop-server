@@ -3,14 +3,126 @@
   <head>
     <meta charset="utf-8">
     <title>DankBank Desktop - Home</title>
-    <link rel="stylesheet" href="./index.css">
-    <script src="./Chart.js" charset="utf-8"></script>
-    <script src="./ChartModern.js" charset="utf-8"></script>
-    <script src="./index2.js" charset="utf-8"></script>
-    <script src="./Luminous.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="/home/index.css">
+    <script src="/home/Chart.js" charset="utf-8"></script>
+    <script src="/home/ChartModern.js" charset="utf-8"></script>
+    <script src="/home/index2.js" charset="utf-8"></script>
+    <script src="/home/Luminous.js" charset="utf-8"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
   </head>
   <body>
+    
+    <div id="mainwrap" style="left: calc(-1 * calc(calc(1 * var(--screen)) - 350px));--screen: 100;">
+      <center class="main">
+        <div class="mainchild">
+        </div>
+      </center>
+      <center class="main" style="position: relative; left: 100vw;">
+        <div class="mainchild">
+        </div>
+      </center>
+      <center class="main" style="position: relative; left: calc(200vw - 350px); top: -100vh;">
+          <div class="usersearch">
+            <pre class="searchbartitle">View a user's profile</pre>
+            <input id="usersearchbar"></input>
+            <!--<pre class="searchbartitle">Pinned Profiles</pre>
+            <div class="pinnedprofile">
+              <img src="/home/lock.svg"></img>
+              <pre class="pinnedprofilename"><pre>u/<b class="pinnedprofilename2">beefjerkyrules</b></pre></pre>
+            </div>
+            <div class="pinnedprofile">
+              <img src="/home/lock.svg"></img>
+              <pre class="pinnedprofilename"><pre>u/<b class="pinnedprofilename2">trevorjthompson</b></pre></pre>
+            </div>-->
+          </div>
+      </center>
+      <div class="firminfo" style="position: relative; left: calc(300vw - 700px); top: calc(-200vh);">
+        <h1 class="paper-firminfo-firmname">...</h1>
+        <h1 class="paper-firminfo-firmcoin">...</h1>
+      </div>
+      <center class="main frimmain" style="position: relative; left: calc(200vw - 350px); top: calc(-200vh + 100px) !important;">
+        <div class="mainchild">
+          <div class="paper-investment">
+            <div class="paper-firm-piechart-title">
+              <pre class="paper-frim-piechart-title-text">Members</pre>
+              <pre class="paper-frim-piechart-title-range">Sorted by balance</pre> 
+            </div>
+            <div class="memberwrapper">
+            </div> 
+          </div>
+          <div class="paper-investment">
+            <div class="paper-firm-piechart-title">
+              <pre class="paper-frim-piechart-title-text">Firm Settings</pre>
+            </div>
+            <div class="firmsetting">
+              <div class="firmsettingiconwrap">
+                <img class="firmsettingicon" src="/home/nextpayout.svg"></img>
+              </div>
+              <div class="firmsettingtextwrap">
+                <pre class="firmsettingtext">Next payout</pre>
+                <pre class="firmsettingval">M¢ ...</pre>
+              </div>
+            </div>
+            <div class="firmsetting">
+              <div class="firmsettingiconwrap">
+                <img class="firmsettingicon" src="/home/members.svg"></img>
+              </div>
+              <div class="firmsettingtextwrap">
+                <pre class="firmsettingtext">Members</pre>
+                <pre class="firmsettingval">... members</pre>
+              </div>
+            </div>
+            <div class="firmsetting">
+              <div class="firmsettingiconwrap">
+                <img class="firmsettingicon" src="/home/tax.svg"></img>
+              </div>
+              <div class="firmsettingtextwrap">
+                <pre class="firmsettingtext">Tax</pre>
+                <pre class="firmsettingval">...%</pre>
+              </div>
+            </div>
+            <div class="firmsetting">
+              <div class="firmsettingiconwrap">
+                <img class="firmsettingicon" src="/home/visibility.svg"></img>
+              </div>
+              <div class="firmsettingtextwrap">
+                <pre class="firmsettingtext">Visibility</pre>
+                <pre class="firmsettingval">...</pre>
+              </div>
+            </div>
+            <div class="firmsetting">
+              <div class="firmsettingiconwrap">
+                <img class="firmsettingicon" src="/home/level.svg"></img>
+              </div>
+              <div class="firmsettingtextwrap">
+                <pre class="firmsettingtext">Level</pre>
+                <pre class="firmsettingval">...</pre>
+              </div>
+            </div>
+            <div class="firmsetting" id="leavefirm">
+              <div class="firmsettingiconwrap">
+                <img class="firmsettingicon" src="/home/leave0.svg"></img>
+              </div>
+              <div class="firmsettingtextwrap">
+                <pre class="firmsettingtext leavefirmtext">Leave</pre>
+                <pre class="firmsettingval leavefirmtext">Leave Firm</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </center>
+      <center class="main" style="position: relative; left: calc(400vw - 1050px); top: calc(-300vh + 150px);">
+        <div class="mainchild">
+          <div class="paper-investment">
+            <h2 class="settingtitle">Legal</h2>
+            <div>
+              <pre class="settingsingleword" onclick="window.open('http://dankbank.io/app/privacypolicy?ref=desktop')">Privacy Policy</pre>
+              <pre class="settingsingleword" onclick="window.open('http://dankbank.io/app/terms?ref=desktop')">Terms and Conditions</pre>
+            </div>
+          </div>
+        </div>
+      </center>
+    </div>
     <div id="slideLeft">
       <div id="single">
         <center><pre id="welcome">Welcome back, <b id="welcomeName">...</b></pre></center>
@@ -28,10 +140,10 @@
       </div>
       <div id="bottomslab">
         <div id="home" onclick="switchtotab(0)">
-          <svg id="activesvg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99l1.5 1.5z"/>
-          </svg>
-        </div>
+            <svg id="activesvg" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99l1.5 1.5z"/>
+            </svg>
+          </div>
         <div id="invest" onclick="switchtotab(1)">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path fill="none" d="M0 0h24v24H0V0z"/>
@@ -44,129 +156,18 @@
           </svg>
         </div>
         <div id="firms" onclick="switchtotab(3)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path fill="none" d="M0 0h24v24H0V0z"/>
-            <path d="M12 7V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2h-8zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm9 12h-7v-2h2v-2h-2v-2h2v-2h-2V9h7c.55 0 1 .45 1 1v8c0 .55-.45 1-1 1zm-1-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/>
-          </svg>
-        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path fill="none" d="M0 0h24v24H0V0z"/>
+          <path d="M12 7V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2h-8zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm9 12h-7v-2h2v-2h-2v-2h2v-2h-2V9h7c.55 0 1 .45 1 1v8c0 .55-.45 1-1 1zm-1-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/>
+        </svg>
+      </div>
         <div id="settings" onclick="switchtotab(4)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path fill="none" d="M0 0h24v24H0V0z"/>
-            <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
-          </svg>
-        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path fill="none" d="M0 0h24v24H0V0z"/>
+          <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+        </svg>
       </div>
-    </div>
-    <div id="mainwrap" style="left: calc(-1 * calc(calc(1 * var(--screen)) - 350px));--screen: 100;">
-      <center class="main">
-        <div class="mainchild">
-        </div>
-      </center>
-      <center class="main" style="position: relative; left: 100vw;">
-        <div class="mainchild">
-        </div>
-      </center>
-      <center class="main" style="position: relative; left: calc(200vw - 350px); top: calc(-100vh + 100px);">
-          <div class="usersearch">
-            <pre class="searchbartitle">View a user's profile</pre>
-            <input id="usersearchbar"></input>
-            <!--<pre class="searchbartitle">Pinned Profiles</pre>
-            <div class="pinnedprofile">
-              <img src="./lock.svg"></img>
-              <pre class="pinnedprofilename"><pre>u/<b class="pinnedprofilename2">beefjerkyrules</b></pre></pre>
-            </div>
-            <div class="pinnedprofile">
-              <img src="./lock.svg"></img>
-              <pre class="pinnedprofilename"><pre>u/<b class="pinnedprofilename2">trevorjthompson</b></pre></pre>
-            </div>-->
-          </div>
-      </center>
-      <div class="firminfo" style="position: relative; left: calc(300vw - 700px); top: calc(-200vh + 150px);">
-        <h1 class="paper-firminfo-firmname">...</h1>
-        <h1 class="paper-firminfo-firmcoin">...</h1>
       </div>
-      <center class="main frimmain" style="position: relative; left: calc(200vw - 350px); top: calc(-200vh + 250px) !important;">
-        <div class="mainchild">
-          <div class="paper-investment">
-            <div class="paper-firm-piechart-title">
-              <pre class="paper-frim-piechart-title-text">Members</pre>
-              <pre class="paper-frim-piechart-title-range">Sorted by balance</pre> 
-            </div>
-            <div class="memberwrapper">
-            </div> 
-          </div>
-          <div class="paper-investment">
-            <div class="paper-firm-piechart-title">
-              <pre class="paper-frim-piechart-title-text">Firm Settings</pre>
-            </div>
-            <div class="firmsetting">
-              <div class="firmsettingiconwrap">
-                <img class="firmsettingicon" src="./nextpayout.svg"></img>
-              </div>
-              <div class="firmsettingtextwrap">
-                <pre class="firmsettingtext">Next payout</pre>
-                <pre class="firmsettingval">M¢ ...</pre>
-              </div>
-            </div>
-            <div class="firmsetting">
-              <div class="firmsettingiconwrap">
-                <img class="firmsettingicon" src="./members.svg"></img>
-              </div>
-              <div class="firmsettingtextwrap">
-                <pre class="firmsettingtext">Members</pre>
-                <pre class="firmsettingval">... members</pre>
-              </div>
-            </div>
-            <div class="firmsetting">
-              <div class="firmsettingiconwrap">
-                <img class="firmsettingicon" src="./tax.svg"></img>
-              </div>
-              <div class="firmsettingtextwrap">
-                <pre class="firmsettingtext">Tax</pre>
-                <pre class="firmsettingval">...%</pre>
-              </div>
-            </div>
-            <div class="firmsetting">
-              <div class="firmsettingiconwrap">
-                <img class="firmsettingicon" src="./visibility.svg"></img>
-              </div>
-              <div class="firmsettingtextwrap">
-                <pre class="firmsettingtext">Visibility</pre>
-                <pre class="firmsettingval">...</pre>
-              </div>
-            </div>
-            <div class="firmsetting">
-              <div class="firmsettingiconwrap">
-                <img class="firmsettingicon" src="./level.svg"></img>
-              </div>
-              <div class="firmsettingtextwrap">
-                <pre class="firmsettingtext">Level</pre>
-                <pre class="firmsettingval">...</pre>
-              </div>
-            </div>
-            <div class="firmsetting" id="leavefirm">
-              <div class="firmsettingiconwrap">
-                <img class="firmsettingicon" src="./leave0.svg"></img>
-              </div>
-              <div class="firmsettingtextwrap">
-                <pre class="firmsettingtext leavefirmtext">Leave</pre>
-                <pre class="firmsettingval leavefirmtext">Leave Firm</pre>
-              </div>
-            </div>
-          </div>
-        </div>
-      </center>
-      <center class="main" style="position: relative; left: calc(400vw - 1050px); top: calc(-300vh + 300px);">
-        <div class="mainchild">
-          <div class="paper-investment">
-            <h2 class="settingtitle">Legal</h2>
-            <div>
-              <pre class="settingsingleword" onclick="openURL('http://dankbank.io/app/privacypolicy?ref=desktop')">Privacy Policy</pre>
-              <pre class="settingsingleword" onclick="openURL('http://dankbank.io/app/terms?ref=desktop')">Terms and Conditions</pre>
-            </div>
-          </div>
-        </div>
-      </center>
     </div>
     <div class="modalwrapper" id="investmodal" style="opacity: 0;z-index: -100;">
       <div class="modal">
@@ -178,7 +179,7 @@
         </div>
         <div class="modalleft">
           <div class="modalbalance">
-            <img class="baliconmodal" src="./bal.svg"></img>
+            <img class="baliconmodal" src="/home/bal.svg"></img>
             <pre class="baltextmodal">Balance</pre>
             <pre class="balmodal">0.00 M¢</pre>
           </div>
@@ -193,7 +194,7 @@
           <img class="modalrightpreview" src="https://i.redd.it/x5fnlxycei531.jpg"></img>
           <div class="modalrightpreview">
             <div class="modalrighticonwrap">
-              <img class="modalrighticon" src="./upvotes.svg"></img>
+              <img class="modalrighticon" src="/home/upvotes.svg"></img>
             </div>
             <div class="modalrighttextwrap">
               <pre class="modalrighttext">Upvotes</pre>
@@ -202,7 +203,7 @@
           </div>
           <div class="modalrightpreview">
             <div class="modalrighticonwrap">
-              <img class="modalrighticon" src="./breakeven.svg"></img>
+              <img class="modalrighticon" src="/home/breakeven.svg"></img>
             </div>
             <div class="modalrighttextwrap">
               <pre class="modalrighttext">Break even</pre>
@@ -211,7 +212,7 @@
           </div>
           <div class="modalrightpreview">
             <div class="modalrighticonwrap">
-              <img class="modalrighticon" src="./maxprofit.svg"></img>
+              <img class="modalrighticon" src="/home/maxprofit.svg"></img>
             </div>
             <div class="modalrighttextwrap">
               <pre class="modalrighttext">Max profit</pre>
@@ -231,12 +232,12 @@
         </div>
         <div class="modalleft">
           <div class="modalbalance">
-            <img class="baliconmodal" src="./bal.svg"></img>
+            <img class="baliconmodal" src="/home/bal.svg"></img>
             <pre class="baltextmodal">Balance</pre>
             <pre class="balmodal">0.00 M¢</pre>
           </div>
           <div class="modalbalance">
-            <img class="baliconmodal" src="./firm.svg"></img>
+            <img class="baliconmodal" src="/home/firm.svg"></img>
             <pre class="baltextmodal">Firm</pre>
             <pre class="balmodal">SomeFirmName</pre>
           </div>
@@ -245,7 +246,7 @@
         <div class="modalright" style="position: relative; top: -518px;">
           <div class="modalrightpreview">
             <div class="modalrighticonwrap">
-              <img class="modalrighticon" src="./level.svg"></img>
+              <img class="modalrighticon" src="/home/level.svg"></img>
             </div>
             <div class="modalrighttextwrap">
               <pre class="modalrighttext">Firm Rank</pre>
@@ -254,7 +255,7 @@
           </div>
           <div class="modalrightpreview">
             <div class="modalrighticonwrap">
-              <img class="modalrighticon" src="./maxprofit.svg"></img>
+              <img class="modalrighticon" src="/home/maxprofit.svg"></img>
             </div>
             <div class="modalrighttextwrap">
               <pre class="modalrighttext">Rank</pre>
@@ -263,7 +264,7 @@
           </div>
           <div class="modalrightpreview">
             <div class="modalrighticonwrap">
-              <img class="modalrighticon" src="./leave.svg"></img>
+              <img class="modalrighticon" src="/home/leave.svg"></img>
             </div>
             <div class="modalrighttextwrap">
               <pre class="modalrighttext">Times gone broke</pre>
@@ -272,7 +273,7 @@
           </div>
           <div class="modalrightpreview">
             <div class="modalrighticonwrap">
-              <img class="modalrighticon" src="./upvotes.svg"></img>
+              <img class="modalrighticon" src="/home/upvotes.svg"></img>
             </div>
             <div class="modalrighttextwrap">
               <pre class="modalrighttext">Comp. investments</pre>
@@ -288,6 +289,6 @@
     <div class="modalwrapper" id="textmodal" style="opacity: 0;z-index: -100;"><center>
       <div class="vertcenter"><pre id="textmodaltext"></pre></div>
     </center></div>
-    <script src="./index.js" charset="utf-8"></script>
+    <script src="/home/index.js" charset="utf-8"></script>
   </body>
 </html>

@@ -100,8 +100,18 @@ window.formatAMPM = (date) => {
   return strTime;
 }
 var ctx = document.getElementById("mainchart").getContext("2d"); 
-const fs = require('fs');
-const EventEmitter = require('events');
+window.callbackfunctions = {};
+window.myEmitter = {
+  "emit": (...data) => {
+    var to = data.shift()
+    if(window.callbackfunctions[to]) {
+      window.callbackfunctions[to].apply(0,data)
+    }
+  },
+  "on": (to, cb) => {
+    window.callbackfunctions[to] = cb
+  }
+}
 function sort_by_key(array, key)
 {
  return array.sort(function(a, b)
@@ -125,7 +135,6 @@ function ordinal_suffix_of(i) {
     return i + "th";
 }
 window.investIn = [];
-window.myEmitter = new EventEmitter();
 window.monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
@@ -133,17 +142,70 @@ var sendHTTPRequest = function(url, callback) {
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
         if (request.readyState == 4 && request.status == 200) {
-            callback(request.responseText); // Another callback here
+            callback(JSON.parse(request.responseText).contents); // Another callback here
         }
     }; 
-    request.open('GET', url);
+    request.open('GET', 'https://api.allorigins.win/get?url=' + encodeURIComponent(url));
     request.send();
 }
 
-const en = require('javascript-time-ago/locale/en')
-const TimeAgo = require('javascript-time-ago')
-TimeAgo.addLocale(en)
-const timeAgo = new TimeAgo('en-US')
+function time_ago(time) {
+
+  switch (typeof time) {
+    case 'number':
+      break;
+    case 'string':
+      time = +new Date(time);
+      break;
+    case 'object':
+      if (time.constructor === Date) time = time.getTime();
+      break;
+    default:
+      time = +new Date();
+  }
+  var time_formats = [
+    [60, 'seconds', 1], // 60
+    [120, '1 minute ago', '1 minute from now'], // 60*2
+    [3600, 'minutes', 60], // 60*60, 60
+    [7200, '1 hour ago', '1 hour from now'], // 60*60*2
+    [86400, 'hours', 3600], // 60*60*24, 60*60
+    [172800, 'Yesterday', 'Tomorrow'], // 60*60*24*2
+    [604800, 'days', 86400], // 60*60*24*7, 60*60*24
+    [1209600, 'Last week', 'Next week'], // 60*60*24*7*4*2
+    [2419200, 'weeks', 604800], // 60*60*24*7*4, 60*60*24*7
+    [4838400, 'Last month', 'Next month'], // 60*60*24*7*4*2
+    [29030400, 'months', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
+    [58060800, 'Last year', 'Next year'], // 60*60*24*7*4*12*2
+    [2903040000, 'years', 29030400], // 60*60*24*7*4*12*100, 60*60*24*7*4*12
+    [5806080000, 'Last century', 'Next century'], // 60*60*24*7*4*12*100*2
+    [58060800000, 'centuries', 2903040000] // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
+  ];
+  var seconds = (+new Date() - time) / 1000,
+    token = 'ago',
+    list_choice = 1;
+
+  if (seconds == 0) {
+    return 'Just now'
+  }
+  if (seconds < 0) {
+    seconds = Math.abs(seconds);
+    token = 'from now';
+    list_choice = 2;
+  }
+  var i = 0,
+    format;
+  while (format = time_formats[i++])
+    if (seconds < format[0]) {
+      if (typeof format[2] == 'string')
+        return format[list_choice];
+      else
+        return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
+    }
+  return time;
+}
+const timeAgo = {
+  "format": time_ago
+}
 
 /*** Gradient ***/
 var gradient = ctx.createLinearGradient(0, 0, 0, 250);
@@ -182,11 +244,6 @@ var myLineChart = chart.Line(data, options);
 
 // ---
 
-const remote = require('electron').remote;
-document.getElementById("close").addEventListener("click", function (e) {
-  remote.getCurrentWindow().close();
-}); 
-
 // calc(decimal-floor(calc(calc(100vw - 350px) / 500px)) * 500px)
 
 var executesetSize = () => {
@@ -221,17 +278,17 @@ var switchtotab = (tabnum) => {
 document.getElementById('mainwrap').style.setProperty('--screen', '350px')
 
 document.getElementById('investmodal').children[0].children[1].children[2].children[1].addEventListener('input', function () {
-  global.investButton = {};
+  window.investButton = {};
   window.modal.children[0].children[1].children[2].children[0].innerText = "Invest amount: " + document.getElementById('investmodal').children[0].children[1].children[2].children[1].value + "%"
-  global.investButton.precent = (document.getElementById('investmodal').children[0].children[1].children[2].children[1].value/100)
+  window.investButton.precent = (document.getElementById('investmodal').children[0].children[1].children[2].children[1].value/100)
   window.modal.children[0].children[1].children[3].innerText = `Invest ${(window.batchSelfData.memeec.balance * (parseInt(document.getElementById('investmodal').children[0].children[1].children[2].children[1].value)/100)).toFixed(2).toLocaleString()} M¢`
-  global.investButton.amount = (window.batchSelfData.memeec.balance * (parseInt(document.getElementById('investmodal').children[0].children[1].children[2].children[1].value)/100)).toFixed(2).toLocaleString()
+  window.investButton.amount = (window.batchSelfData.memeec.balance * (parseInt(document.getElementById('investmodal').children[0].children[1].children[2].children[1].value)/100)).toFixed(2).toLocaleString()
   if((window.batchSelfData.memeec.balance * (parseInt(document.getElementById('investmodal').children[0].children[1].children[2].children[1].value)/100)) < 100) {
     window.modal.children[0].children[1].children[3].style.opacity = "0.3"
-    global.investButton.canInvest = false
+    window.investButton.canInvest = false
   } else {
     window.modal.children[0].children[1].children[3].style.opacity = "1"
-    global.investButton.canInvest = true
+    window.investButton.canInvest = true
   }
 }, false);
 
@@ -375,13 +432,15 @@ var toggleusermodal = () => {
 //websocket
 
 window.socket = new WebSocket('ws://dankbank.io:81');
-global.page = 0;
-global.isoktocall = false;
+window.page = 0;
+window.isoktocall = false;
 // Connection opened
 socket.addEventListener('open', function (event) {
   socket.send(JSON.stringify({
     "type": "authenticate", 
-    "data": JSON.parse(fs.readFileSync("./account.JSON", 'utf-8'))
+    "data": {
+      'uuid': document.cookie.split("=")[1]
+    }
   }));
 });
 
@@ -393,7 +452,7 @@ socket.addEventListener('message', function (event) {
 });
 
 myEmitter.on('openURL', (url, ws) => {
-  require('open')(url)
+  window.open(url)
 });
 
 myEmitter.on('batchSelfData', (data, ws) => {
@@ -450,7 +509,7 @@ myEmitter.on('batchSelfData', (data, ws) => {
               <pre class="memberinfobal">M¢ ${data.balance.toLocaleString()}.00</pre>
             </div>
             <div class="memberactionswrapper">
-              <img class="memberactionicon" src="./promoteuser.svg" onclick="joinfirm(this.parentElement.parentElement.children[0].children[1].innerText)">
+              <img class="memberactionicon" src="/home/promoteuser.svg" onclick="joinfirm(this.parentElement.parentElement.children[0].children[1].innerText)">
             </div>
           </div>`
         })
@@ -461,7 +520,7 @@ myEmitter.on('batchSelfData', (data, ws) => {
   } else {
     window.lastfirm =[]
     if(document.getElementsByClassName('firmsettingval').length != 6) {
-      document.getElementsByClassName('frimmain')[0].children[0].innerHTML = `<div class="paper-investment"><div class="paper-firm-piechart-title"><pre class="paper-frim-piechart-title-text">Members</pre><pre class="paper-frim-piechart-title-range">Sorted by balance</pre> </div><div class="memberwrapper"></div> </div><div class="paper-investment"><div class="paper-firm-piechart-title"><pre class="paper-frim-piechart-title-text">Firm Settings</pre></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="./nextpayout.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Next payout</pre><pre class="firmsettingval">M¢ ...</pre></div></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="./members.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Members</pre><pre class="firmsettingval">... members</pre></div></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="./tax.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Tax</pre><pre class="firmsettingval">...%</pre></div></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="./visibility.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Visibility</pre><pre class="firmsettingval">...</pre></div></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="./level.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Level</pre><pre class="firmsettingval">...</pre></div></div><div class="firmsetting" id="leavefirm" onclick="leavefirm()"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="./leave0.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext leavefirmtext">Leave</pre><pre class="firmsettingval leavefirmtext">Leave Firm</pre></div></div></div>`
+      document.getElementsByClassName('frimmain')[0].children[0].innerHTML = `<div class="paper-investment"><div class="paper-firm-piechart-title"><pre class="paper-frim-piechart-title-text">Members</pre><pre class="paper-frim-piechart-title-range">Sorted by balance</pre> </div><div class="memberwrapper"></div> </div><div class="paper-investment"><div class="paper-firm-piechart-title"><pre class="paper-frim-piechart-title-text">Firm Settings</pre></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="/home/nextpayout.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Next payout</pre><pre class="firmsettingval">M¢ ...</pre></div></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="/home/members.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Members</pre><pre class="firmsettingval">... members</pre></div></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="/home/tax.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Tax</pre><pre class="firmsettingval">...%</pre></div></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="/home/visibility.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Visibility</pre><pre class="firmsettingval">...</pre></div></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="/home/level.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Level</pre><pre class="firmsettingval">...</pre></div></div><div class="firmsetting" id="leavefirm" onclick="leavefirm()"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="/home/leave0.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext leavefirmtext">Leave</pre><pre class="firmsettingval leavefirmtext">Leave Firm</pre></div></div></div>`
     } else {}
     document.getElementsByClassName('paper-firminfo-firmname')[0].innerText = data.firm.name
     document.getElementsByClassName('paper-firminfo-firmcoin')[0].innerText = `F¢ ${data.firm.balance.toLocaleString()}.00`
@@ -498,9 +557,9 @@ myEmitter.on('batchFirmUsers', (data, ws) => {
         <pre class="memberinfobal">M¢ ${usr.balance.toLocaleString()}.00</pre>
       </div>
       <div class="memberactionswrapper">
-        <img class="memberactionicon" src="./kickuser.svg" onclick="kickuser(this.parentElement.parentElement.children[0].children[1].innerText)"> 
-        <img class="memberactionicon" src="./demoteuser.svg" onclick="demoteuser(this.parentElement.parentElement.children[0].children[1].innerText)">
-        <img class="memberactionicon" src="./promoteuser.svg" onclick="promoteuser(this.parentElement.parentElement.children[0].children[1].innerText)">
+        <img class="memberactionicon" src="/home/kickuser.svg" onclick="kickuser(this.parentElement.parentElement.children[0].children[1].innerText)"> 
+        <img class="memberactionicon" src="/home/demoteuser.svg" onclick="demoteuser(this.parentElement.parentElement.children[0].children[1].innerText)">
+        <img class="memberactionicon" src="/home/promoteuser.svg" onclick="promoteuser(this.parentElement.parentElement.children[0].children[1].innerText)">
       </div>
     </div>`
     
@@ -670,7 +729,7 @@ var hideLoadModal = () => {
 }
 document.getElementsByClassName("modalinvestbutton")[0].addEventListener('click', () => {
   
-  if(global.investButton.canInvest) {
+  if(window.investButton.canInvest) {
     
     showLoadModal();
     
@@ -753,9 +812,9 @@ setInterval(() => {
           } 
           item.children[2].children[0].children[0].innerText = `${window.investIn[index].breakEven} Upvotes to break even, ${window.investIn[index].maxProfit}x Max profit.`
           item.children[2].children[0].children[1].innerText = `${window.investIn[index].score} Upvotes. ${window.investIn[index].num_comments} Comments.`
-          if(global.charts[updateObject.id]) {
+          if(window.charts[updateObject.id]) {
             var now = new Date()
-            global.charts[updateObject.id].forEach(charttoupdate => {
+            window.charts[updateObject.id].forEach(charttoupdate => {
               addData(charttoupdate, formatAMPM(now) + " " + monthNames[now.getMonth()] + " " + now.getDate(), window.investIn[index].score)
             })
             
@@ -769,7 +828,7 @@ setInterval(() => {
 
 myEmitter.on('update', (data) => {
   window.toUpdate = data
-  global.isoktocall = true;
+  window.isoktocall = true;
 })
 
 
@@ -925,7 +984,7 @@ renderInvested = async () => {
             <pre class="investmenttime">${(() => {
               var timeDifference = new Date((14400000 - (Date.now() - (investment.time * 1000))))
               return String(timeDifference.getHours() - 1).padStart(2, "0")+":"+String(timeDifference.getMinutes()).padStart(2, "0")
-            })()}<img style="width: 20px;height: 20px;position: relative;top: 9px;margin: 5px;" src="./clock.svg"></img></pre>
+            })()}<img style="width: 20px;height: 20px;position: relative;top: 9px;margin: 5px;" src="/home/clock.svg"></img></pre>
           </div>
           <canvas class="upvotechart" width="520px" height="180px"></canvas>
         </div>
@@ -1000,7 +1059,7 @@ renderInvested = async () => {
                   <pre class="investmenttime">${(() => {
                     var timeDifference = new Date((14400000 - (Date.now() - (investment.time * 1000))))
                     return String(timeDifference.getHours() - 1).padStart(2, "0")+":"+String(timeDifference.getMinutes()).padStart(2, "0")
-                  })()}<img style="width: 20px;height: 20px;position: relative;top: 9px;margin: 5px;" src="./clock.svg"></img></pre>
+                  })()}<img style="width: 20px;height: 20px;position: relative;top: 9px;margin: 5px;" src="/home/clock.svg"></img></pre>
                 </div>
                 <canvas class="upvotechart" width="520px" height="180px"></canvas>
               </div>
@@ -1029,12 +1088,12 @@ renderInvested = async () => {
 
 document.getElementsByClassName('main')[1].onscroll = () => {
   var distancefrombottom = Math.abs(document.getElementsByClassName('main')[1].scrollTop - document.getElementsByClassName('main')[1].scrollHeight) - 990
-  if(distancefrombottom < 4000 && global.isoktocall) {
-    global.isoktocall = false;
-    global.page++;
+  if(distancefrombottom < 4000 && window.isoktocall) {
+    window.isoktocall = false;
+    window.page++;
     socket.send(JSON.stringify({
       "type": "getPagePosts", 
-      "data": global.page
+      "data": window.page
     }));
   }
 }

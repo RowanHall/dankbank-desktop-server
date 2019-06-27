@@ -1,8 +1,14 @@
-const openURL = require('open');
-var uuidv4 = require('uuid/v4')
-global.memory = {}
-global.usercharts = {};
-global.charts = {}
+
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+window.memory = {}
+window.usercharts = {};
+window.charts = {}
 window.formatChart = (chart, postID) => {
   getChartInfo(postID, (data) => {
     var ctx = chart.getContext("2d"); 
@@ -47,10 +53,10 @@ window.formatChart = (chart, postID) => {
         responsive: false
       }
     });
-    if(global.charts[postID]) {
-      global.charts[postID].push(myChart)
+    if(window.charts[postID]) {
+      window.charts[postID].push(myChart)
     } else {
-      global.charts[postID] = [myChart]
+      window.charts[postID] = [myChart]
     }
   })
 }
@@ -93,7 +99,7 @@ window.formatChartUser = (chart, data,name ) => {
       responsive: false
     }
   });
-  global.usercharts[name] = myChart
+  window.usercharts[name] = myChart
 }
 
 window.clearChartUser = (chart) => {
@@ -134,9 +140,9 @@ window.clearChartUser = (chart) => {
       responsive: false
     }
   });
-  Object.keys(global.usercharts).forEach((i) => {
-    global.usercharts[i].destroy();
-    delete global.usercharts[i]
+  Object.keys(window.usercharts).forEach((i) => {
+    window.usercharts[i].destroy();
+    delete window.usercharts[i]
   })
 }
 

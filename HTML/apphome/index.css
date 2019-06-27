@@ -58,16 +58,15 @@
   transform: rotate(-45deg);
 }
 #slideLeft {
-  z-index: 1000;
-  position: relative;
-  top: 50px;
+  position: absolute;
   background-color: #00e;
   width: 350px;
-  height: calc(100vh - 50px);
+  height: 100vh;
   -webkit-box-shadow: -134px 1px 85px 143px rgba(0,0,0,0.52);
   -moz-box-shadow: -134px 1px 85px 143px rgba(0,0,0,0.52);
   box-shadow: -134px 145px 85px 143px rgba(0,0,0,0.52);
   overflow: hidden;
+  z-index: 10000;
 }
 #welcome {
   padding-top: 20px;
@@ -118,8 +117,9 @@
   background-color: rgba(255,255,255,0.4);
   position: absolute;
   bottom: 0px;
-  left: 0px;
+  z-index: 10000;
 }
+
 #home, #invest, #friends, #firms, #settings {
   margin-left: 5px;
   margin-right: 5px;
@@ -166,9 +166,9 @@ svg {
 
 .main {
   position: absolute;
-  top: 50px;
+  top: 0px;
   left: 350px;
-  height: calc(100vh - 50px);
+  height: calc(100vh - 0px);
   width: calc(100vw - 350px);
   overflow: scroll;
   overflow-x: hidden;
