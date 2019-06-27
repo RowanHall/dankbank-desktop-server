@@ -58,12 +58,6 @@ app.get('dankbank.io/CDN/phone.png', (req, res) => {
 app.get('dankbank.io/CDN/devices.png', (req, res) => {
   res.sendFile(__dirname + "/CDN/devices.png")
 })
-
-app.get('web.dankbank.io/', (req, res) => {
-  console.log('Cookies: ', req.cookies)
-  res.sendFile(__dirname + "/HTML/frontend/login/index.html")
-})
-
 app.get('desktopapi.dankbank.io/getAccount', (req, res) => {
   res.send(accountmanager.getAccount(req.query.uuid))
 })
@@ -97,20 +91,20 @@ app.get('desktopapi.dankbank.io/makeAccount', (req, res) => {
 app.get('desktopapi.dankbank.io/authenticate', (req, res) => {
   res.send(accountmanager.authenticate(req.query.username, req.query.password))
 })
-app.get('desktop.dankbank.io/', (req, res) => {
+app.get('web.dankbank.io/', (req, res) => {
   if(req.cookies.uuid) {
     res.redirect("home")
   } else {
     res.redirect("notauthed")
   }
 })
-app.get('desktop.dankbank.io/notauthed', (req, res) => {
+app.get('web.dankbank.io/notauthed', (req, res) => {
   res.sendFile(__dirname + "/HTML/notauthed/index.html")
 })
-app.get('desktop.dankbank.io/notauthed/index.css', (req, res) => {
+app.get('web.dankbank.io/notauthed/index.css', (req, res) => {
   res.sendFile(__dirname + "/HTML/notauthed/index.css")
 })
-app.get('desktop.dankbank.io/notauthed/index.js', (req, res) => {
+app.get('web.dankbank.io/notauthed/index.js', (req, res) => {
   res.sendFile(__dirname + "/HTML/notauthed/index.js")
 })
 
