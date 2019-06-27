@@ -143,7 +143,7 @@ wss.on('connection', function connection(ws) {
         clearInterval(global.loops[ws.selfuuid])
       }
     }
-  } 
+  }
   ws.selfuuid = uuidv4();
   ws.on('message', function incoming(message) {
     try {
@@ -161,11 +161,12 @@ wss.on('connection', function connection(ws) {
       }))
     }
   });
-  
+
   ws.on('close', () => {
-    
+
   })
-  
+  ws.on('error', () => {})
+
 });
 
 
@@ -200,12 +201,12 @@ var aaz = () => {
     global.oktocallazz = true;
     console.log(chalk.red("S <R- R"), chalk.blue(`getSubreddit('MemeEconomy')`))
     data = formatData(data)
-    
+
     if(global.olddata) {
-      
+
       Object.keys(data).forEach(newkey => {
         var neww = data[newkey];
-        
+
         if(global.posthistory[newkey]) {
           global.posthistory[newkey].time.push(Date.now())
           global.posthistory[newkey].values.push(neww.score)
@@ -218,11 +219,11 @@ var aaz = () => {
           global.posthistory[newkey].values.push(neww.score)
         }
         global.posthistory[newkey].current = neww;
-        
-        
+
+
         var old = global.olddata[newkey]
         if(old) {
-          
+
           var hasUpdated = false;
           var updateObject = {
             "id": newkey
@@ -230,7 +231,7 @@ var aaz = () => {
           updateObject.newScore = neww.score
           updateObject.newComment = neww.comment
           updateObjectBlock.push(updateObject)
-          
+
         } else {
           wss.clients.forEach(ws => {
             ws.send(JSON.stringify({
@@ -240,9 +241,9 @@ var aaz = () => {
           })
         }
       })
-      
+
     }
-    
+
     global.olddata = data
     wss.clients.forEach(ws => {
       ws.send(JSON.stringify({
@@ -252,7 +253,7 @@ var aaz = () => {
     })
     fs.writeFileSync("./posthistory.JSON", JSON.stringify(global.posthistory))
   })
-  
+
 }
 aaz()
 global.oktocallazz = true;
@@ -325,7 +326,7 @@ redditAuthed = (ws, uuid, cb) => {
       "type": "batchMemedata",
       "data": c.chunk(40)[0]
     }))
-    
+
     var r11 = async (self) => {
       console.log(chalk.green("S -R> M"), chalk.blue(`getInvestor('${self.name}')`))
       var d = await fetch("https://meme.market/api/investor/" + self.name)
@@ -376,7 +377,7 @@ redditAuthed = (ws, uuid, cb) => {
         "type": "batchInvestments",
         "data": fulldata
       }));
-      
+
       if(data.firm != 0) {
         var fulldata = [];
         var finished = false
@@ -396,7 +397,7 @@ redditAuthed = (ws, uuid, cb) => {
           "data": fulldata
         }));
       }
-    
+
     }
     console.log(chalk.green("S -R> R"), chalk.blue(`getMe()`))
     r.getMe().then(async (self) => {
@@ -508,9 +509,9 @@ emitter.on('getUser', async (ws, dataGL) => {
 })
 
 emitter.on('InvestMeme', (ws, investmentdata) => {
-  
+
   //use the reddit API to invest into the meme stored in investmentdata.id
-  
+
   console.log(chalk.green("S -R> R"), chalk.blue(`getSubmission('${investmentdata.id}')`))
   snoosbyuuid[ws.data.uuid].getSubmission(investmentdata.id).expandReplies({
     "limit": 1
@@ -531,15 +532,15 @@ emitter.on('InvestMeme', (ws, investmentdata) => {
       }));
     })
   })
-  
-  
-  
+
+
+
 })
 
 emitter.on('joinFirm', (ws, investmentdata) => {
-  
+
   //use the reddit API to join the firm.
-  
+
   console.log(chalk.green("S -R> R"), chalk.blue(`getSubreddit('MemeEconomy')`))
   snoosbyuuid[ws.data.uuid].getSubreddit('memeeconomy').getHot().then(data => {
     console.log(chalk.red("S <R- R"), chalk.blue(`getSubreddit('MemeEconomy')`))
@@ -565,15 +566,15 @@ emitter.on('joinFirm', (ws, investmentdata) => {
       })
     })
   })
-  
-  
-  
+
+
+
 })
 
 emitter.on('leaveFirm', (ws, investmentdata) => {
-  
+
   //use the reddit API to join the firm.
-  
+
   snoosbyuuid[ws.data.uuid].getSubreddit('memeeconomy').getNew().then(data => {
     snoosbyuuid[ws.data.uuid].getSubmission(data[0].id).expandReplies({
       "limit": 1
@@ -589,7 +590,7 @@ emitter.on('leaveFirm', (ws, investmentdata) => {
       })
     })
   })
-  
-  
-  
+
+
+
 })
