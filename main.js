@@ -46,6 +46,9 @@ app.get('dankbank.io/home.css', (req, res) => {
 app.get('dankbank.io/CDN/logo_outline.png', (req, res) => {
   res.sendFile(__dirname + "/CDN/logo_outline.png")
 })
+app.get('dankbank.io/CDN/buildings.jpeg', (req, res) => {
+  res.sendFile(__dirname + "/CDN/buildings.jpeg")
+})
 app.get('dankbank.io/CDN/laptop.png', (req, res) => {
   res.sendFile(__dirname + "/CDN/laptop.png")
 })
@@ -94,11 +97,21 @@ app.get('desktopapi.dankbank.io/makeAccount', (req, res) => {
 app.get('desktopapi.dankbank.io/authenticate', (req, res) => {
   res.send(accountmanager.authenticate(req.query.username, req.query.password))
 })
-app.get('desktopapi.dankbank.io/destroyAccount', (req, res) => {
-  res.send(accountmanager.destroyAccount(req.query.uuid))
+app.get('desktop.dankbank.io/', (req, res) => {
+  if(req.cookies.uuid) {
+    res.redirect("home")
+  } else {
+    res.redirect("notauthed")
+  }
 })
-app.get('desktop.dankbank.io/redditAuth', (req, res) => {
-  res.send(accountmanager.redditAuth(req.query.state, req.query.code))
+app.get('desktop.dankbank.io/notauthed', (req, res) => {
+  res.sendFile(__dirname + "/HTML/notauthed/index.html")
+})
+app.get('desktop.dankbank.io/notauthed/index.css', (req, res) => {
+  res.sendFile(__dirname + "/HTML/notauthed/index.css")
+})
+app.get('desktop.dankbank.io/notauthed/index.js', (req, res) => {
+  res.sendFile(__dirname + "/HTML/notauthed/index.js")
 })
 
 app.get('*', (req, res) => {

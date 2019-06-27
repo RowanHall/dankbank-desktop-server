@@ -1,0 +1,17 @@
+/* Error: This at-rule isn't allowed in plain CSS.
+ *   ,
+ * 1 | @function decimal-round ($number, $digits: 0, $mode: round) {
+ *   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ *   '
+ *   src\frontend\home\index.css 1:1  root stylesheet */
+
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: This at-rule isn't allowed in plain CSS.\a   \2577 \a 1 \2502  @function decimal-round ($number, $digits: 0, $mode: round) {\d\a   \2502  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a   \2575 \a   src\\frontend\\home\\index.css 1:1  root stylesheet";
+}

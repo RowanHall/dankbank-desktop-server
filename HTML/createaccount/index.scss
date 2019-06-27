@@ -1,0 +1,199 @@
+@import url('https://fonts.googleapis.com/css?family=Google+Sans:100,300,400,500,700,900,100i,300i,400i,500i,700i,900i');
+
+@mixin shadow($a) {
+  -webkit-box-shadow: $a;
+  -moz-box-shadow: $a;
+  box-shadow: $a;
+}
+body {
+  background:linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("./0.jpeg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center; 
+  background-size: cover;
+  height: 100vh;
+  overflow: hidden;
+}
+* {
+  color: rgba(255,255,255,0.8);
+  font-family: 'Google Sans', sans-serif;
+  margin: 0px;
+  &:focus {
+    outline: none;
+  }
+}
+#centerslab {
+  width: 750px;
+  height:530px;
+  position:absolute;
+  left:50%;
+  top:50%;
+  margin: calc(-520px/2) 0 0 calc(-750px/2);
+  background-color: rgba(255,255,255,0.8);
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+#signinfavicon {
+  opacity: 0.8;
+  position: relative;
+  top: 8px;
+  width: 40px;
+  height: 40px;
+}
+h1 {
+  font-size: 40px;
+  padding: 20px;
+}
+input {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 5px;
+  font-size: 25px;
+  padding: 15px;
+  padding-top: 35px;
+  border: 2px solid rgba(0,0,0,0.2);
+  width: 500px;
+  position: relative;
+  top: 15px;
+  margin-top: -35px;
+}
+button {
+  margin: 20px;
+  width: 500px;
+  font-size: 25px;
+  height: 50px;
+  background: linear-gradient(90deg, rgba(4,92,255,1) 50%, rgba(130,0,255,1) 100%);
+  border: 0px;
+  border-radius: 25px;
+  @include shadow(0px 25px 50px 0px rgba(0,0,0,0.3));
+  transform: scale(1);
+  transition: transform 0.2s;
+  &:hover {
+    transform: scale(1.025);
+  }
+}
+#subtext {
+  font-size: 12px;
+}
+#name {
+  font-size: 30px;
+  position: relative;
+  position: relative;
+  top: -5px;
+}
+#topcenter {
+  background-color: rgba(0,0,0,0.2);
+  padding: 0px;
+}
+#topBar {
+  -webkit-app-region: drag;
+  background-color: rgba(0,0,0,0.4);
+  @include shadow(0px -72px 50px 94px rgba(0,0,0,0.3));
+  height: 50px;
+}
+
+#close {
+  -webkit-app-region: no-drag;
+  width: 50px;
+  height: 50px;
+  float: right;
+  position: relative;
+  top:-50px;
+  background-color: rgba(255,0,0,0.2);
+  &:hover {
+    background-color: rgba(255,0,0,0.3);
+  }
+}
+
+.close {
+  position: absolute;
+  right: 41px;
+  top: 7.5px;
+  float:right;
+  &:hover {
+    opacity: 1;
+  }
+  &:before, &:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 2px;
+    border-radius: 10px;
+    background-color: #fff;
+  }
+  &:before {
+    transform: rotate(45deg);
+  }
+  &:after {
+    transform: rotate(-45deg);
+  }
+}
+
+#title {
+  color: #fff; 
+  font-size: 25px;
+  padding: 10px;
+}
+.floatbtm {
+  position: absolute;
+  bottom:calc(calc(60vh - 457px)/5);
+  width: 100%;
+}
+
+#back {
+  -webkit-app-region: no-drag;
+  float: left;
+  background-color: rgba(0,0,0,0.2);
+  width:50px;
+  height: 50px;
+  margin-right: 10px;
+  &:hover {
+    background-color: rgba(0,0,0,0.3);
+  }
+}
+.back {
+  position: absolute;
+  left: 9px;
+  top: 7.5px;
+  float:right;
+  &:before {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 3px;
+    border-radius: 100px;
+    background-color: #fff;
+    transform: rotate(90deg);
+  }
+  &:hover {
+    opacity: 1;
+  }
+}
+.backinner {
+  color: #fff;
+  font-size: 32px;
+  position: relative;
+  left: -4px;
+  top:-5.1px;
+}
+#error {
+  color: #CC0000;
+  font-style: italic;
+  font-size: 28px;
+}
+#logindisabled {
+  filter: grayscale(1);
+}
+
+.label-group {
+  margin-bottom:5px;
+}
+label {
+  display: block;
+  text-align: left;
+  position: relative;
+  left: 126px;
+  top: 32px;
+  font-size: 18px;
+}

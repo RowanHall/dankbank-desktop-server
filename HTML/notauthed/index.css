@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css?family=Google+Sans:100,300,400,500,700,900,100i,300i,400i,500i,700i,900i');
+body {
+  background:linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url("http://dankbank.io/CDN/buildings.jpeg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center; 
+  background-size: cover;
+  height: 100vh;
+}
+* {
+  color: #fff;
+  font-family: 'Google Sans', sans-serif;
+  margin: 0px;
+  
+}
+#bottomslab {
+  --vheight: 350px;
+  position: absolute;
+  height: var(--vheight);
+  top: calc(100vh - var(--vheight));
+  left: 50px;
+}
+#signinfavicon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 40px;
+}
+h1 {
+  font-size: 40px;
+}
+button {
+  margin: 20px;
+  width: 500px;
+  font-size: 25px;
+  height: 50px;
+  background: linear-gradient(90deg, rgba(4,92,255,1) 50%, rgba(130,0,255,1) 100%);
+  border: 0px;
+  border-radius: 25px;
+  -webkit-box-shadow: 0px 25px 50px 0px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0px 25px 50px 0px rgba(0,0,0,0.3);
+  box-shadow: 0px 25px 50px 0px rgba(0,0,0,0.3);
+  transform: scale(1);
+  transition: transform 0.2s;
+}
+#subtext {
+  font-size: 12px;
+}
+#name {
+  font-size: 35px;
+  position: relative;
+  top:47px;
+  left: 55px;
+}
+#topBar {
+  -webkit-app-region: drag;
+  background-color: rgba(0,0,0,0.4);
+  -webkit-box-shadow: 0px -72px 50px 94px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0px -72px 50px 94px rgba(0,0,0,0.3);
+  box-shadow: 0px -72px 50px 94px rgba(0,0,0,0.3);
+  height: 50px;
+}
+
+button:hover {
+  transform: scale(1.025);
+}
+
+#close {
+  -webkit-app-region: no-drag;
+  width: 50px;
+  height: 50px;
+  float: right;
+  position: relative;
+  top:-50px;
+  background-color: rgba(255,0,0,0.2)
+}
+#close:hover {
+  background-color: rgba(255,0,0,0.3)
+}
+
+*:focus {
+  outline: none;
+}
+
+.close {
+  position: absolute;
+  right: 41px;
+  top: 7.5px;
+  float:right;
+}
+.close:hover {
+  opacity: 1;
+}
+.close:before, .close:after {
+  position: absolute;
+  left: 15px;
+  content: ' ';
+  height: 33px;
+  width: 2px;
+  border-radius: 10px;
+  background-color: #fff;
+}
+.close:before {
+  transform: rotate(45deg);
+}
+.close:after {
+  transform: rotate(-45deg);
+}
+
+#title {
+  font-size: 25px;
+  padding: 10px;
+}
