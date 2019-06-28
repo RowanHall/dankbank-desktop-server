@@ -154,6 +154,11 @@ app.get('web.dankbank.io/createaccount/index.js', (req, res) => {
   res.sendFile(__dirname + "/HTML/createaccount/index.js")
 })
 app.get('web.dankbank.io/home', (req, res) => {
+  if(req.cookies.uuid) {
+    res.sendFile(__dirname + "/HTML/apphome/index.html")
+  } else {
+    res.redirect("http://web.dankbank.io/notauthed")
+  }
   res.sendFile(__dirname + "/HTML/apphome/index.html")
 })
 app.get('web.dankbank.io/home/index.css', (req, res) => {
