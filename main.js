@@ -67,9 +67,10 @@ app.get('desktopapi.dankbank.io/redditAuth', async (req, res) => {
     var d = await request.post({
       uri: 'access_token',
       auth: { user: "s05eekpXEMDenA", pass: "BOGCDA_bD1hAaUQsQ5xuAD4LYQ8" || '' },
-      form: { grant_type: 'authorization_code', code: req.query.code, redirect_uri: "http://desktopapi.dankbank.io.dev.localhost/redditAuth" },
+      form: { grant_type: 'authorization_code', code: req.query.code, redirect_uri: "http://desktopapi.dankbank.io/redditAuth" },
     })
     console.log(chalk.red("S <R- R"), chalk.blue(`acsess_token('${req.query.code}')`))
+    console.log(d)
     accountmanager.redditAuth(req.query.state, d.refresh_token)
     redditAuthed(socketsbyuuid[req.query.state], req.query.state, (snoo) => {
       snoosbyuuid[req.query.state] = snoo
@@ -411,7 +412,7 @@ emitter.on('authenticate', (ws, inputdata, ret) => {
       } else {
         ws.send(JSON.stringify({
           "type": "openURL",
-          "data": "https://www.reddit.com/api/v1/authorize?client_id=s05eekpXEMDenA&response_type=code&state=" + inputdata.uuid + "&redirect_uri=http://desktopapi.dankbank.io.dev.localhost/redditAuth&duration=permanent&scope=identity%20read%20submit%20vote%20edit"
+          "data": "https://www.reddit.com/api/v1/authorize?client_id=s05eekpXEMDenA&response_type=code&state=" + inputdata.uuid + "&redirect_uri=http://desktopapi.dankbank.io/redditAuth&duration=permanent&scope=identity%20read%20submit%20vote%20edit"
         }))
       }
     } else {
@@ -721,15 +722,15 @@ emitter.on('leaveFirm', (ws, investmentdata) => {
       })
     })
   })
-  
-  
-  
+
+
+
 })
 
 emitter.on('kickUser', (ws, investmentdata) => {
-  
+
   //use the reddit API to join the firm.
-  
+
   console.log(chalk.green("S -R> R"), chalk.blue(`getSubreddit('MemeEconomy')`))
   snoosbyuuid[ws.data.uuid].getSubreddit('memeeconomy').getHot().then(data => {
     console.log(chalk.red("S <R- R"), chalk.blue(`getSubreddit('MemeEconomy')`))
@@ -755,15 +756,15 @@ emitter.on('kickUser', (ws, investmentdata) => {
       })
     })
   })
-  
-  
-  
+
+
+
 })
 
 emitter.on('promoteUser', (ws, investmentdata) => {
-  
+
   //use the reddit API to join the firm.
-  
+
   console.log(chalk.green("S -R> R"), chalk.blue(`getSubreddit('MemeEconomy')`))
   snoosbyuuid[ws.data.uuid].getSubreddit('memeeconomy').getHot().then(data => {
     console.log(chalk.red("S <R- R"), chalk.blue(`getSubreddit('MemeEconomy')`))
@@ -789,15 +790,15 @@ emitter.on('promoteUser', (ws, investmentdata) => {
       })
     })
   })
-  
-  
-  
+
+
+
 })
 
 emitter.on('demoteUser', (ws, investmentdata) => {
-  
+
   //use the reddit API to join the firm.
-  
+
   console.log(chalk.green("S -R> R"), chalk.blue(`getSubreddit('MemeEconomy')`))
   snoosbyuuid[ws.data.uuid].getSubreddit('memeeconomy').getHot().then(data => {
     console.log(chalk.red("S <R- R"), chalk.blue(`getSubreddit('MemeEconomy')`))
