@@ -38,25 +38,32 @@ app.use(function(req, res, next){
 });
 
 app.get('dankbank.io/', (req, res) => {
-  res.sendFile(__dirname + "/HTML/HOME/index.html")
+  res.type('.html')
+  res.send(fs.readFileSync(__dirname + "/HTML/HOME/index.html", 'utf-8'))
 })
 app.get('dankbank.io/home.css', (req, res) => {
-  res.sendFile(__dirname + "/HTML/HOME/index.css")
+  res.type('.css')
+  res.send(fs.readFileSync(__dirname + "/HTML/HOME/index.css"))
 })
 app.get('dankbank.io/CDN/logo_outline.png', (req, res) => {
-  res.sendFile(__dirname + "/CDN/logo_outline.png")
+  res.type('.png')
+  res.send(fs.readFileSync(__dirname + "/CDN/logo_outline.png"))
 })
 app.get('dankbank.io/CDN/buildings.jpeg', (req, res) => {
-  res.sendFile(__dirname + "/CDN/buildings.jpeg")
+  res.type('.jpeg')
+  res.send(fs.readFileSync(__dirname + "/CDN/buildings.jpeg"))
 })
 app.get('dankbank.io/CDN/laptop.png', (req, res) => {
-  res.sendFile(__dirname + "/CDN/laptop.png")
+  res.type('.png')
+  res.send(fs.readFileSync(__dirname + "/CDN/laptop.png"))
 })
 app.get('dankbank.io/CDN/phone.png', (req, res) => {
-  res.sendFile(__dirname + "/CDN/phone.png")
+  res.type('.png')
+  res.send(fs.readFileSync(__dirname + "/CDN/phone.png"))
 })
 app.get('dankbank.io/CDN/devices.png', (req, res) => {
-  res.sendFile(__dirname + "/CDN/devices.png")
+  res.type('.png')
+  res.send(fs.readFileSync(__dirname + "/CDN/devices.png"))
 })
 app.get('desktopapi.dankbank.io/getAccount', (req, res) => {
   res.send(accountmanager.getAccount(req.query.uuid))
@@ -67,16 +74,17 @@ app.get('desktopapi.dankbank.io/redditAuth', async (req, res) => {
     var d = await request.post({
       uri: 'access_token',
       auth: { user: "s05eekpXEMDenA", pass: "BOGCDA_bD1hAaUQsQ5xuAD4LYQ8" || '' },
-      form: { grant_type: 'authorization_code', code: req.query.code, redirect_uri: "http://desktopapi.dankbank.io.dev.localhost/redditAuth" },
+      form: { grant_type: 'authorization_code', code: req.query.code, redirect_uri: "http://desktopapi.dankbank.io/redditAuth" },
     })
     console.log(chalk.red("S <R- R"), chalk.blue(`acsess_token('${req.query.code}')`))
+    console.log(d)
     accountmanager.redditAuth(req.query.state, d.refresh_token)
     redditAuthed(socketsbyuuid[req.query.state], req.query.state, (snoo) => {
       snoosbyuuid[req.query.state] = snoo
-      res.sendFile(__dirname + "/HTML/AUTH/index.html")
+      res.send(fs.readFileSync(__dirname + "/HTML/AUTH/index.html", 'utf-8'))
     })
   } else {
-    res.sendFile(__dirname + "/HTML/AUTH/failed.html")
+    res.send(fs.readFileSync(__dirname + "/HTML/AUTH/failed.html", 'utf-8'))
   }
 })
 app.get('desktopapi.dankbank.io/makeAccount', (req, res) => {
@@ -116,119 +124,156 @@ app.get('web.dankbank.io/', (req, res) => {
   }
 })
 app.get('web.dankbank.io/notauthed', (req, res) => {
-  res.sendFile(__dirname + "/HTML/notauthed/index.html")
+  res.type('.html')
+  res.send(fs.readFileSync(__dirname + "/HTML/notauthed/index.html", 'utf-8'))
 })
 app.get('web.dankbank.io/notauthed/index.css', (req, res) => {
-  res.sendFile(__dirname + "/HTML/notauthed/index.css")
+  res.type('.css')
+  res.send(fs.readFileSync(__dirname + "/HTML/notauthed/index.css", 'utf-8'))
 })
 app.get('web.dankbank.io/notauthed/index.js', (req, res) => {
-  res.sendFile(__dirname + "/HTML/notauthed/index.js")
+  res.type('.js')
+  res.send(fs.readFileSync(__dirname + "/HTML/notauthed/index.js", 'utf-8'))
 })
 app.get('web.dankbank.io/login', (req, res) => {
   if(req.query.uuid) {
     res.cookie("uuid", req.query.uuid)
     res.redirect("home")
   } else {
-    res.sendFile(__dirname + "/HTML/login/index.html")
+    res.send(fs.readFileSync(__dirname + "/HTML/login/index.html", 'utf-8'))
   }
 })
 app.get('web.dankbank.io/login/index.css', (req, res) => {
-  res.sendFile(__dirname + "/HTML/login/index.css")
+  res.type('.css')
+  res.send(fs.readFileSync(__dirname + "/HTML/login/index.css", 'utf-8'))
 })
 app.get('web.dankbank.io/login/index.js', (req, res) => {
-  res.sendFile(__dirname + "/HTML/login/index.js")
+  res.type('.js')
+  res.send(fs.readFileSync(__dirname + "/HTML/login/index.js", 'utf-8'))
 })
 app.get('web.dankbank.io/createaccount', (req, res) => {
   if(req.query.uuid) {
     res.cookie("uuid", req.query.uuid)
     res.redirect("home")
   } else {
-    res.sendFile(__dirname + "/HTML/createaccount/index.html")
+    res.send(fs.readFileSync(__dirname + "/HTML/createaccount/index.html", 'utf-8'))
   }
 })
 app.get('web.dankbank.io/createaccount/index.css', (req, res) => {
-  res.sendFile(__dirname + "/HTML/createaccount/index.css")
+  res.type('.css')
+  res.send(fs.readFileSync(__dirname + "/HTML/createaccount/index.css", 'utf-8'))
 })
 app.get('web.dankbank.io/createaccount/index.js', (req, res) => {
-  res.sendFile(__dirname + "/HTML/createaccount/index.js")
+  res.type('.js')
+  res.send(fs.readFileSync(__dirname + "/HTML/createaccount/index.js", 'utf-8'))
 })
 app.get('web.dankbank.io/home', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/index.html")
+  if(req.cookies.uuid) {
+    res.send(fs.readFileSync(__dirname + "/HTML/apphome/index.html", 'utf-8'))
+  } else {
+    res.redirect("http://web.dankbank.io/notauthed")
+  }
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/index.html", 'utf-8'))
 })
 app.get('web.dankbank.io/home/index.css', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/index.css")
+  res.type('.css')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/index.css", 'utf-8'))
 })
 app.get('web.dankbank.io/home/index.js', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/index.js")
+  res.type('.js')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/index.js", 'utf-8'))
 })
 app.get('web.dankbank.io/home/index2.js', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/index2.js")
+  res.type('.js')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/index2.js", 'utf-8'))
 })
 app.get('web.dankbank.io/home/Chart.js', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/Chart.js")
+  res.type('.js')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/Chart.js", 'utf-8'))
 })
 app.get('web.dankbank.io/home/ChartModern.js', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/ChartModern.js")
+  res.type('.js')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/ChartModern.js", 'utf-8'))
 })
 app.get('web.dankbank.io/home/Luminous.js', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/Luminous.js")
+  res.type('.js')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/Luminous.js", 'utf-8'))
 })
 app.get('web.dankbank.io/home/nextpayout.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/nextpayout.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/nextpayout.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/members.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/members.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/members.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/tax.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/tax.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/tax.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/visibility.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/visibility.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/visibility.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/level.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/level.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/level.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/leave.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/leave.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/leave.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/leave0.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/leave0.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/leave0.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/bal.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/bal.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/bal.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/upvotes.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/upvotes.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/upvotes.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/breakeven.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/breakeven.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/breakeven.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/maxprofit.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/maxprofit.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/maxprofit.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/firm.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/firm.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/firm.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/bal.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/bal.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/bal.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/level.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/level.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/level.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/bank.jpg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/bank.jpg")
+  res.type('.jpg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/bank.jpg"))
 })
 app.get('web.dankbank.io/home/clock.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/clock.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/clock.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/kickuser.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/kickuser.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/kickuser.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/promoteuser.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/promoteuser.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/promoteuser.svg", 'utf-8'))
 })
 app.get('web.dankbank.io/home/demoteuser.svg', (req, res) => {
-  res.sendFile(__dirname + "/HTML/apphome/demoteuser.svg")
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/HTML/apphome/demoteuser.svg", 'utf-8'))
 })
 
 
@@ -411,7 +456,7 @@ emitter.on('authenticate', (ws, inputdata, ret) => {
       } else {
         ws.send(JSON.stringify({
           "type": "openURL",
-          "data": "https://www.reddit.com/api/v1/authorize?client_id=s05eekpXEMDenA&response_type=code&state=" + inputdata.uuid + "&redirect_uri=http://desktopapi.dankbank.io.dev.localhost/redditAuth&duration=permanent&scope=identity%20read%20submit%20vote%20edit"
+          "data": "https://www.reddit.com/api/v1/authorize?client_id=s05eekpXEMDenA&response_type=code&state=" + inputdata.uuid + "&redirect_uri=http://desktopapi.dankbank.io/redditAuth&duration=permanent&scope=identity%20read%20submit%20vote%20edit"
         }))
       }
     } else {
@@ -721,15 +766,15 @@ emitter.on('leaveFirm', (ws, investmentdata) => {
       })
     })
   })
-  
-  
-  
+
+
+
 })
 
 emitter.on('kickUser', (ws, investmentdata) => {
-  
+
   //use the reddit API to join the firm.
-  
+
   console.log(chalk.green("S -R> R"), chalk.blue(`getSubreddit('MemeEconomy')`))
   snoosbyuuid[ws.data.uuid].getSubreddit('memeeconomy').getHot().then(data => {
     console.log(chalk.red("S <R- R"), chalk.blue(`getSubreddit('MemeEconomy')`))
@@ -755,15 +800,15 @@ emitter.on('kickUser', (ws, investmentdata) => {
       })
     })
   })
-  
-  
-  
+
+
+
 })
 
 emitter.on('promoteUser', (ws, investmentdata) => {
-  
+
   //use the reddit API to join the firm.
-  
+
   console.log(chalk.green("S -R> R"), chalk.blue(`getSubreddit('MemeEconomy')`))
   snoosbyuuid[ws.data.uuid].getSubreddit('memeeconomy').getHot().then(data => {
     console.log(chalk.red("S <R- R"), chalk.blue(`getSubreddit('MemeEconomy')`))
@@ -789,15 +834,15 @@ emitter.on('promoteUser', (ws, investmentdata) => {
       })
     })
   })
-  
-  
-  
+
+
+
 })
 
 emitter.on('demoteUser', (ws, investmentdata) => {
-  
+
   //use the reddit API to join the firm.
-  
+
   console.log(chalk.green("S -R> R"), chalk.blue(`getSubreddit('MemeEconomy')`))
   snoosbyuuid[ws.data.uuid].getSubreddit('memeeconomy').getHot().then(data => {
     console.log(chalk.red("S <R- R"), chalk.blue(`getSubreddit('MemeEconomy')`))
