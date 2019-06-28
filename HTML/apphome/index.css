@@ -779,3 +779,12 @@ body {
   text-align:center;
   font-size: 48px;
 }
+#openmodalbutton {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 48px;
+  position: relative;
+  top: calc(50vh - 48px);
+  color: #000;
+}

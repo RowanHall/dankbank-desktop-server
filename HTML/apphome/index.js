@@ -428,6 +428,28 @@ var toggleusermodal = () => {
   }
 }
 
+var showBTNModal = () => {
+  document.getElementById('openmodal').style.opacity = "1"
+  document.getElementById('openmodal').style.zIndex = "1000000"
+}
+var hideBTNModal = () => {
+  document.getElementById('openmodal').style.opacity = "0"
+  setTimeout(() => {
+    document.getElementById('openmodal').style.zIndex = "-100"
+  }, 100)
+}
+
+window.callbackurl = -1;
+window.openwindowcallback = () => {
+  if(window.callbackurl != -1) {
+    window.open(window.callbackurl)
+  }
+  hideBTNModal();
+}
+var OPENURL = (url) => {
+  window.callbackurl = url
+  showBTNModal();
+}
 
 //websocket
 
@@ -452,7 +474,7 @@ socket.addEventListener('message', function (event) {
 });
 
 myEmitter.on('openURL', (url, ws) => {
-  window.open(url)
+  OPENURL(url)
 });
 
 myEmitter.on('batchSelfData', (data, ws) => {
