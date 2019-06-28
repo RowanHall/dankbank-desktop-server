@@ -653,7 +653,7 @@ emitter.on('InvestMeme', (ws, investmentdata) => {
       console.log(chalk.red("S <R- R"), chalk.blue(`reply('${investmentdata.id}')`))
       setTimeout(() => {
         console.log(chalk.green("S -R> R"), chalk.blue(`edit('${post.id}')`))
-        post.edit('!invest ' + investmentdata.investAmount + '%\n\n>Invested with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
+        post.edit('!invest ' + investmentdata.investAmount + '%\n\n>Invested with [DankBank Desktop for ' + investmentdata.platform + '](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
           console.log(chalk.red("S <R- R"), chalk.blue(`edit('${post.id}')`))
         })
       }, 25000)
@@ -686,7 +686,7 @@ emitter.on('joinFirm', (ws, investmentdata) => {
         console.log(chalk.red("S <R- R"), chalk.blue(`comment('${data.comments[0].id}')`))
         setTimeout(() => {
           console.log(chalk.green("S -R> R"), chalk.blue(`edit('${post.id}')`))
-          post.edit('!joinfirm ' + investmentdata.id + '\n\n>Firm left with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
+          post.edit('!joinfirm ' + investmentdata.id + '\n\n>Firm joined with [DankBank Desktop for ' + investmentdata.platform + '](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
             console.log(chalk.red("S <R- R"), chalk.blue(`edit('${post.id}')`))
           })
         }, 25000)
@@ -712,7 +712,7 @@ emitter.on('leaveFirm', (ws, investmentdata) => {
     }).then((data) => {
       data.comments[0].reply("!leavefirm").then((post) => {
         setTimeout(() => {
-          post.edit('!leavefirm \n\n>Firm left with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.')
+          post.edit('!leavefirm \n\n>Firm left with [DankBank Desktop for ' + investmentdata.platform + '](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.')
         }, 25000)
         ws.send(JSON.stringify({
           "type": "responseTo:" + investmentdata.uuid,
@@ -744,7 +744,7 @@ emitter.on('kickUser', (ws, investmentdata) => {
         console.log(chalk.red("S <R- R"), chalk.blue(`comment('${data.comments[0].id}')`))
         setTimeout(() => {
           console.log(chalk.green("S -R> R"), chalk.blue(`edit('${post.id}')`))
-          post.edit('!fire ' + investmentdata.id + '\n\n>User kicked with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
+          post.edit('!fire ' + investmentdata.id + '\n\n>User kicked with [DankBank Desktop for ' + investmentdata.platform + '](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
             console.log(chalk.red("S <R- R"), chalk.blue(`edit('${post.id}')`))
           })
         }, 25000)
@@ -778,7 +778,7 @@ emitter.on('promoteUser', (ws, investmentdata) => {
         console.log(chalk.red("S <R- R"), chalk.blue(`comment('${data.comments[0].id}')`))
         setTimeout(() => {
           console.log(chalk.green("S -R> R"), chalk.blue(`edit('${post.id}')`))
-          post.edit('!promote ' + investmentdata.id + '\n\n>User promoted with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
+          post.edit('!promote ' + investmentdata.id + '\n\n>User promoted with [DankBank Desktop for ' + investmentdata.platform + '](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
             console.log(chalk.red("S <R- R"), chalk.blue(`edit('${post.id}')`))
           })
         }, 25000)
@@ -812,7 +812,7 @@ emitter.on('demoteUser', (ws, investmentdata) => {
         console.log(chalk.red("S <R- R"), chalk.blue(`comment('${data.comments[0].id}')`))
         setTimeout(() => {
           console.log(chalk.green("S -R> R"), chalk.blue(`edit('${post.id}')`))
-          post.edit('!demote ' + investmentdata.id + '\n\n>User demoted with [DankBank Desktop for Windows](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
+          post.edit('!demote ' + investmentdata.id + '\n\n>User demoted with [DankBank Desktop for ' + investmentdata.platform + '](http://dankbank.io/) {/*DEVELOPMENT VERSION*/}. The easiest way to invest in memes.').then(() => {
             console.log(chalk.red("S <R- R"), chalk.blue(`edit('${post.id}')`))
           })
         }, 25000)

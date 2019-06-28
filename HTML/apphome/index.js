@@ -639,7 +639,8 @@ var leavefirm = () => {
   window.socket.send(JSON.stringify({
     type: "leaveFirm",
     data: {
-      "uuid": uuid
+      "uuid": uuid,
+      "platform": "web"
     }
   }))
   window.myEmitter.on(x, (data, ws) => {
@@ -655,7 +656,8 @@ var joinfirm = (firmName) => {
     type: "joinFirm",
     data: {
       "uuid": uuid,
-      "id": firmName
+      "id": firmName,
+      'platform': 'web'
     }
   }))
   window.myEmitter.on(x, (data, ws) => {
@@ -671,7 +673,8 @@ var kickuser = (firmName) => {
     type: "kickUser",
     data: {
       "uuid": uuid,
-      "id": firmName
+      "id": firmName,
+      'platform': 'web'
     }
   }))
   window.myEmitter.on(x, (data, ws) => {
@@ -687,7 +690,8 @@ var promoteuser = (firmName) => {
     type: "promoteUser",
     data: {
       "uuid": uuid,
-      "id": firmName
+      "id": firmName,
+      'platform': 'web'
     }
   }))
   window.myEmitter.on(x, (data, ws) => {
@@ -703,7 +707,8 @@ var demoteuser = (firmName) => {
     type: "demoteUser",
     data: {
       "uuid": uuid,
-      "id": firmName
+      "id": firmName,
+      'platform': 'web'
     }
   }))
   window.myEmitter.on(x, (data, ws) => {
@@ -762,7 +767,8 @@ document.getElementsByClassName("modalinvestbutton")[0].addEventListener('click'
       data: {
         "uuid": uuid,
         "id": window.selectedInvestment.id,
-        "investAmount": String(window.investButton.precent * 100)
+        "investAmount": String(window.investButton.precent * 100),
+        "platform": "web"
       }
     }))
     window.myEmitter.on(x, (data, ws) => {
