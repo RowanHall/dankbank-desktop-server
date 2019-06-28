@@ -99,7 +99,7 @@ window.formatAMPM = (date) => {
   var strTime = hours + ':' + minutes + ' ' + ampm;
   return strTime;
 }
-var ctx = document.getElementById("mainchart").getContext("2d"); 
+var ctx = document.getElementById("mainchart").getContext("2d");
 window.callbackfunctions = {};
 window.myEmitter = {
   "emit": (...data) => {
@@ -144,7 +144,7 @@ var sendHTTPRequest = function(url, callback) {
         if (request.readyState == 4 && request.status == 200) {
             callback(JSON.parse(request.responseText).contents); // Another callback here
         }
-    }; 
+    };
     request.open('GET', 'https://api.allorigins.win/get?url=' + encodeURIComponent(url));
     request.send();
 }
@@ -209,7 +209,7 @@ const timeAgo = {
 
 /*** Gradient ***/
 var gradient = ctx.createLinearGradient(0, 0, 0, 250);
-    gradient.addColorStop(0, 'rgba(255,255,255,1)');   
+    gradient.addColorStop(0, 'rgba(255,255,255,1)');
     gradient.addColorStop(1, 'rgba(255,255,255,0)');
 /***************/
 
@@ -248,9 +248,11 @@ var myLineChart = chart.Line(data, options);
 
 var executesetSize = () => {
   try {
-    document.styleSheets[1].rules[29].styleMap.set('width', (Math.floor((document.body.parentElement.offsetWidth - 350)/600)*600)+'px')
+    document.styleSheets[1].rules[29].style.width = ((Math.floor((document.body.parentElement.offsetWidth - 350)/600)*600)+'px')
   } catch(err) {
-    document.styleSheets[0].rules[29].styleMap.set('width', (Math.floor((document.body.parentElement.offsetWidth - 350)/600)*600)+'px')
+    try {
+      document.styleSheets[0].rules[29].style.width = ((Math.floor((document.body.parentElement.offsetWidth - 350)/600)*600)+'px')
+    } catch(err) {}
   }
 }
 
@@ -459,7 +461,7 @@ window.isoktocall = false;
 // Connection opened
 socket.addEventListener('open', function (event) {
   socket.send(JSON.stringify({
-    "type": "authenticate", 
+    "type": "authenticate",
     "data": {
       'uuid': document.cookie.split("=")[1]
     }
@@ -497,10 +499,10 @@ myEmitter.on('batchSelfData', (data, ws) => {
   document.getElementById('rank').innerText = data.memeec.rank.toLocaleString()
   document.getElementById('broke').innerText = data.memeec.broke.toLocaleString()
   document.getElementById('compInvestments').innerText = data.memeec.completed.toLocaleString()
-  
-  
+
+
   //firm stuff :sigh:
-  
+
   if(data.firm.id == 0) {
     // warn user to join a firm
     // frimmain
@@ -521,7 +523,7 @@ myEmitter.on('batchSelfData', (data, ws) => {
       if(data.length != window.lastfirm.length) {
         document.getElementsByClassName('frimmain')[0].children[0].innerHTML = `<div class="paper-investment"><div class="paper-firm-piechart-title"><pre class="paper-frim-piechart-title-text">Join A Firm</pre><pre class="paper-frim-piechart-title-range">Firm list:</pre> </div><div class="memberwrapper"></div> </div>`
         console.log("FIRMS", data)
-        
+
         var firmmembers = ''
         data.forEach((data) => {
           firmmembers = firmmembers + `<div class="member" style="opacity:${data.private ? "0.5" : "1"};">
@@ -564,14 +566,14 @@ myEmitter.on('batchFirmUsers', (data, ws) => {
       var position = index+1
       firmplacement = ordinal_suffix_of(position)
     }
-    
+
     //
-    
+
     var firm_role = usr.firm_role
     if(firm_role == "") {
       firm_role = "Floor Trader"
     }
-    
+
     var member = `<div class="member">
       <div class="memberinfowrapper">
         <pre class="memberinforank">${firm_role}</pre>
@@ -579,19 +581,19 @@ myEmitter.on('batchFirmUsers', (data, ws) => {
         <pre class="memberinfobal">M¢ ${usr.balance.toLocaleString()}.00</pre>
       </div>
       <div class="memberactionswrapper">
-        <img class="memberactionicon" src="/home/kickuser.svg" onclick="kickuser(this.parentElement.parentElement.children[0].children[1].innerText)"> 
+        <img class="memberactionicon" src="/home/kickuser.svg" onclick="kickuser(this.parentElement.parentElement.children[0].children[1].innerText)">
         <img class="memberactionicon" src="/home/demoteuser.svg" onclick="demoteuser(this.parentElement.parentElement.children[0].children[1].innerText)">
         <img class="memberactionicon" src="/home/promoteuser.svg" onclick="promoteuser(this.parentElement.parentElement.children[0].children[1].innerText)">
       </div>
     </div>`
-    
+
     document.getElementsByClassName('memberwrapper')[0].innerHTML = document.getElementsByClassName('memberwrapper')[0].innerHTML + member
-    
+
   })
   document.getElementById('firmplacement').innerText = firmplacement
-  
-  
-  
+
+
+
   var rankmap
 });
 
@@ -629,7 +631,7 @@ myEmitter.on('batchInvestments', (data, ws) => {
   })
   window.investmentData = investData
   renderInvested();
-  
+
 })
 
 var leavefirm = () => {
@@ -750,11 +752,11 @@ var hideLoadModal = () => {
   setTimeout(hideTextModal, 4000)
 }
 document.getElementsByClassName("modalinvestbutton")[0].addEventListener('click', () => {
-  
+
   if(window.investButton.canInvest) {
-    
+
     showLoadModal();
-    
+
     var uuid = uuidv4()
     var x = ("responseTo:" + uuid)
     window.socket.send(JSON.stringify({
@@ -769,9 +771,9 @@ document.getElementsByClassName("modalinvestbutton")[0].addEventListener('click'
       hideLoadModal();
       hideInvestModal();
     })
-    
+
   }
-  
+
 })
 
 window.toUpdate = []
@@ -789,7 +791,7 @@ setInterval(() => {
         }
         if(updateObject.newScore) {
           window.selectedInvestment.num_comments = updateObject.newScore
-          
+
           var maxProfit = C(updateObject.newScore, 100000000000000000000).toFixed(2)
           var breakEven = "Error!"
           var found = false;
@@ -802,14 +804,14 @@ setInterval(() => {
               breakEven = i;
             }
           }
-          
+
           document.getElementsByClassName("modalrightval")[0].innerText = updateObject.newScore
           document.getElementsByClassName("modalrightval")[1].innerText = breakEven
           document.getElementsByClassName("modalrightval")[2].innerText = maxProfit
         }
       }
-      
-      
+
+
       if(item.attributes[1].nodeValue == updateObject.id) {
         var index = -1
         window.investIn.forEach((iiitem,iii) => {
@@ -820,7 +822,7 @@ setInterval(() => {
         if(index != -1) {
           if(updateObject.newComment) {
             window.investIn[index].num_comments = updateObject.newComment
-          } 
+          }
           if(updateObject.newScore) {
             window.investIn[index].score = updateObject.newScore
             window.investIn[index].maxProfit = C(window.investIn[index].score, 100000000000000000000).toFixed(2)
@@ -831,7 +833,7 @@ setInterval(() => {
                 window.investIn[index].breakEven = i;
               }
             }
-          } 
+          }
           item.children[2].children[0].children[0].innerText = `${window.investIn[index].breakEven} Upvotes to break even, ${window.investIn[index].maxProfit}x Max profit.`
           item.children[2].children[0].children[1].innerText = `${window.investIn[index].score} Upvotes. ${window.investIn[index].num_comments} Comments.`
           if(window.charts[updateObject.id]) {
@@ -839,7 +841,7 @@ setInterval(() => {
             window.charts[updateObject.id].forEach(charttoupdate => {
               addData(charttoupdate, formatAMPM(now) + " " + monthNames[now.getMonth()] + " " + now.getDate(), window.investIn[index].score)
             })
-            
+
           }
         }
       }
@@ -863,7 +865,7 @@ renderInvestIn = () => {
   </a>
   <div class="info">
     <div class="investmentinfo">
-      <pre class="inventmentinfo1">${upvotesToBreakEven} Upvotes to break even, ${maxProfit}x Max profit.</pre> 
+      <pre class="inventmentinfo1">${upvotesToBreakEven} Upvotes to break even, ${maxProfit}x Max profit.</pre>
       <pre class="inventmentinfo2">${upvotes} Upvotes. ${comments} Comments.</pre>
     </div>
     <div class="investmentbuttonwrap">
@@ -885,7 +887,7 @@ var batchAdd = ""
       }
     } catch(err) {}
     try {
-      
+
       window.investIn[index] = item
       batchAdd = batchAdd + htmlBuilder(item.title, item.preview.images[0].source.url, item.score, item.id, item.num_comments, item.breakEven, item.maxProfit)
     } catch(err) {}
@@ -995,7 +997,7 @@ renderInvested = async () => {
                     c = "+"
                   }
                   return c + Math.round(num)
-                  
+
                 })()
               } else {
                 return "..."
@@ -1012,7 +1014,7 @@ renderInvested = async () => {
         </div>
       </div>`
     }
-    
+
     batchHTML = batchHTML + investmentHTML
     if(investment.reddit && investment.completed) {} else {
       sendHTTPRequest("http://reddit.com/" + investment.post + ".json", (data) => {
@@ -1087,7 +1089,7 @@ renderInvested = async () => {
               </div>
             </div>`
           }
-          
+
           child.outerHTML = investmentHTML
           if(!(child.classList[1])) {
             var child = document.getElementById(child.id)
@@ -1098,7 +1100,7 @@ renderInvested = async () => {
     })
     }
   })
-  
+
   document.getElementsByClassName('mainchild')[0].innerHTML = batchHTML
   Array.from(document.getElementsByClassName('mainchild')[0].children).forEach((a) => {
     if(!(a.classList[1])) {
@@ -1114,7 +1116,7 @@ document.getElementsByClassName('main')[1].onscroll = () => {
     window.isoktocall = false;
     window.page++;
     socket.send(JSON.stringify({
-      "type": "getPagePosts", 
+      "type": "getPagePosts",
       "data": window.page
     }));
   }
