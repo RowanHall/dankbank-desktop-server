@@ -45,9 +45,29 @@ app.get('dankbank.io/home.css', (req, res) => {
   res.type('.css')
   res.send(fs.readFileSync(__dirname + "/HTML/HOME/index.css"))
 })
+app.get('dankbank.io/homepreload.js', (req, res) => {
+  res.type('.js')
+  res.send(fs.readFileSync(__dirname + "/HTML/HOME/preload.js"))
+})
+app.get('dankbank.io/homepostload.js', (req, res) => {
+  res.type('.js')
+  res.send(fs.readFileSync(__dirname + "/HTML/HOME/postload.js"))
+})
 app.get('dankbank.io/CDN/logo_outline.png', (req, res) => {
   res.type('.png')
   res.send(fs.readFileSync(__dirname + "/CDN/logo_outline.png"))
+})
+app.get('dankbank.io/settings', (req, res) => {
+  res.type('.html')
+  res.send(fs.readFileSync(__dirname + "/HTML/settings/index.html", "utf-8"))
+})
+app.get('dankbank.io/settings/index.css', (req, res) => {
+  res.type('.css')
+  res.send(fs.readFileSync(__dirname + "/HTML/settings/index.css"))
+})
+app.get('dankbank.io/settings/index.js', (req, res) => {
+  res.type('.js')
+  res.send(fs.readFileSync(__dirname + "/HTML/settings/index.js"))
 })
 app.get('dankbank.io/CDN/buildings.jpeg', (req, res) => {
   res.type('.jpeg')
@@ -287,7 +307,7 @@ var events = require('events').EventEmitter;
 var emitter = new events.EventEmitter();
 
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 81 });
+const wss = new WebSocket.Server({ port: 8880 });
 const snoowrap = require('snoowrap');
 const snoostorm = require('snoostorm-es6');
 function noop() {}

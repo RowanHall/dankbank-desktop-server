@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="/settings/index.css">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-142999629-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-142999629-1');
+    </script>
+  </head>
+  <body>
+    <div class="titlebar">
+      <pre class="title">Account Settings</pre>
+      <pre class="subtitle">You can manage your account here!</pre>
+    </div>
+    <div class="settingsection">
+      <sectiontitle>Scripting API</sectiontitle><br>
+      <sectionbody>
+        <textarea autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" class="codeinput javascript" id="script" cols="50" rows="10"></textarea><button onclick="window.open('http://dankbank.io/scriptingDocumentation')">Documentation</button><button onclick="submit();">Submit</button>
+      </sectionbody>
+    </div>
+    <script src="/settings/index.js" charset="utf-8"></script>
+  </body>
+</html>

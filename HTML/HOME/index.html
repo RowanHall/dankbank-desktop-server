@@ -5,12 +5,22 @@
     <title></title>
     <link rel="stylesheet" href="/home.css">
     <script src="/homepreload.js" charset="utf-8"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-142999629-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-142999629-1');
+    </script>
   </head>
   <body>
     <nav>
       <center class="logo_top_left_wrapper">
         <pre class="title"><img class="logo_top_left" src="/cdn/logo_outline.png"/>DankBank</pre>
       </center>
+      <pre id="accclick" class="accountRight"><img class="accountRightIMG" src="https://www.redditstatic.com/avatars/avatar_default_12_FF585B.png"/></pre>
     </nav>
     <paperBody>
       <h1 class="documentTitle">DankBank</h1>
@@ -19,6 +29,11 @@
         <img src="/cdn/devices.png" id="devices" class="screenshotimage" alt="">
       </div></center>
     </paperBody>
+    <div class="paperAccountSettings" style="opacity: 0;">
+      <div class="setting">
+        <pre class="settingname">Account Settings</pre>
+      </div>
+    </div>
     <script src="/homepostload.js" charset="utf-8"></script>
   </body>
 </html>

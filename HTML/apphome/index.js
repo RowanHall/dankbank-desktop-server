@@ -455,7 +455,7 @@ var OPENURL = (url) => {
 
 //websocket
 
-window.socket = new WebSocket('ws://dankbank.io:81');
+window.socket = new WebSocket('ws://dankbank.io:8880');
 window.page = 0;
 window.isoktocall = false;
 // Connection opened
@@ -638,6 +638,7 @@ var leavefirm = () => {
   showLoadModal();
   var uuid = uuidv4()
   var x = ("responseTo:" + uuid)
+  ga('send', 'event', "FIRM", "LEAVE");
   window.socket.send(JSON.stringify({
     type: "leaveFirm",
     data: {
@@ -654,6 +655,7 @@ var joinfirm = (firmName) => {
   showLoadModal();
   var uuid = uuidv4()
   var x = ("responseTo:" + uuid)
+  ga('send', 'event', "FIRM", "JOIN", firmName);
   window.socket.send(JSON.stringify({
     type: "joinFirm",
     data: {
@@ -671,6 +673,7 @@ var kickuser = (firmName) => {
   showLoadModal();
   var uuid = uuidv4()
   var x = ("responseTo:" + uuid)
+  ga('send', 'event', "FIRM", "KICK_USER", firmName);
   window.socket.send(JSON.stringify({
     type: "kickUser",
     data: {
@@ -688,6 +691,7 @@ var promoteuser = (firmName) => {
   showLoadModal();
   var uuid = uuidv4()
   var x = ("responseTo:" + uuid)
+  ga('send', 'event', "FIRM", "PROMOTE_USER", firmName);
   window.socket.send(JSON.stringify({
     type: "promoteUser",
     data: {
@@ -705,6 +709,7 @@ var demoteuser = (firmName) => {
   showLoadModal();
   var uuid = uuidv4()
   var x = ("responseTo:" + uuid)
+  ga('send', 'event', "FIRM", "DEMOTE_USER", firmName);
   window.socket.send(JSON.stringify({
     type: "demoteUser",
     data: {
@@ -764,6 +769,7 @@ document.getElementsByClassName("modalinvestbutton")[0].addEventListener('click'
 
     var uuid = uuidv4()
     var x = ("responseTo:" + uuid)
+    ga('send', 'event', "INVESTMENT", "INVEST", window.selectedInvestment.id, String(window.investButton.precent * 100));
     window.socket.send(JSON.stringify({
       type: "InvestMeme",
       data: {
