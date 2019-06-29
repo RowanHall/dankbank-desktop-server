@@ -13,6 +13,7 @@ const FormData = require('form-data');
 const chalk = require('chalk');
 const uuidv4 = require('uuid/v4')
 const requestregular = require('request');
+const https = require('https');
 
 function sort_by_key(array, key)
 {
@@ -41,7 +42,7 @@ app.get('dankbank.io/', (req, res) => {
   res.type('.html')
   res.send(fs.readFileSync(__dirname + "/HTML/HOME/index.html", 'utf-8'))
 })
-app.get('dankbank.io/home.css', (req, res) => {
+app.get('dankbank.io/home/index.css', (req, res) => {
   res.type('.css')
   res.send(fs.readFileSync(__dirname + "/HTML/HOME/index.css"))
 })
@@ -307,7 +308,11 @@ var events = require('events').EventEmitter;
 var emitter = new events.EventEmitter();
 
 const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 8880 });
+const server = https.createServer({
+  cert: fs.readFileSync('./cert.pem'),
+  key: fs.readFileSync('./key.pem')
+});
+const wss = new WebSocket.Server({ server });
 const snoowrap = require('snoowrap');
 const snoostorm = require('snoostorm-es6');
 function noop() {}
@@ -892,3 +897,5 @@ emitter.on('demoteUser', (ws, investmentdata) => {
 
 
 })
+
+server.listen(2083);

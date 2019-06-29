@@ -455,15 +455,20 @@ var OPENURL = (url) => {
 
 //websocket
 
-window.socket = new WebSocket('ws://dankbank.io:8880');
+window.socket = new WebSocket('wss://dankbank.io:2083');
 window.page = 0;
 window.isoktocall = false;
 // Connection opened
 socket.addEventListener('open', function (event) {
+  var c = {}
+  document.cookie.split("; ").forEach(cookie => {
+  	var azz = cookie.split("=")
+  	c[azz[0]] = azz[1]
+  })
   socket.send(JSON.stringify({
     "type": "authenticate",
     "data": {
-      'uuid': document.cookie.split("=")[1]
+      'uuid': c.uuid
     }
   }));
 });
