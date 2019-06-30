@@ -74,17 +74,33 @@ app.get('dankbank.io/CDN/buildings.jpeg', (req, res) => {
   res.type('.jpeg')
   res.send(fs.readFileSync(__dirname + "/CDN/buildings.jpeg"))
 })
-app.get('dankbank.io/CDN/laptop.png', (req, res) => {
-  res.type('.png')
-  res.send(fs.readFileSync(__dirname + "/CDN/laptop.png"))
-})
-app.get('dankbank.io/CDN/phone.png', (req, res) => {
-  res.type('.png')
-  res.send(fs.readFileSync(__dirname + "/CDN/phone.png"))
-})
 app.get('dankbank.io/CDN/devices.png', (req, res) => {
   res.type('.png')
   res.send(fs.readFileSync(__dirname + "/CDN/devices.png"))
+})
+app.get('dankbank.io/CDN/googleplay.svg', (req, res) => {
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/CDN/googleplay.svg"))
+})
+app.get('dankbank.io/CDN/appstore.svg', (req, res) => {
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/CDN/appstore.svg"))
+})
+app.get('dankbank.io/CDN/earth.svg', (req, res) => {
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/CDN/earth.svg"))
+})
+app.get('dankbank.io/CDN/windows.png', (req, res) => {
+  res.type('.png')
+  res.send(fs.readFileSync(__dirname + "/CDN/windows.png"))
+})
+app.get('dankbank.io/CDN/osx.svg', (req, res) => {
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/CDN/osx.svg"))
+})
+app.get('dankbank.io/CDN/Patreon.svg', (req, res) => {
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/CDN/Patreon.svg"))
 })
 app.get('desktopapi.dankbank.io/getAccount', (req, res) => {
   res.send(accountmanager.getAccount(req.query.uuid))

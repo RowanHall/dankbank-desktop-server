@@ -46,7 +46,7 @@ function annotate(number, maxPlaces, forcePlaces, abbr) {
   if(maxPlaces !== false) {
     var test = new RegExp('\\.\\d{' + (maxPlaces + 1) + ',}$')
     if(test.test(('' + rounded))) {
-      rounded = rounded.toFixed(maxPlaces)
+      rounded = rounded.toFixed(2)
     }
   }
   if(forcePlaces !== false) {
@@ -283,7 +283,7 @@ document.getElementById('investmodal').children[0].children[1].children[2].child
   window.investButton = {};
   window.modal.children[0].children[1].children[2].children[0].innerText = "Invest amount: " + document.getElementById('investmodal').children[0].children[1].children[2].children[1].value + "%"
   window.investButton.precent = (document.getElementById('investmodal').children[0].children[1].children[2].children[1].value/100)
-  window.modal.children[0].children[1].children[3].innerText = `Invest ${(window.batchSelfData.memeec.balance * (parseInt(document.getElementById('investmodal').children[0].children[1].children[2].children[1].value)/100)).toFixed(2).toLocaleString()} M¢`
+  window.modal.children[0].children[1].children[3].innerText = `Invest ${abbreviate(window.batchSelfData.memeec.balance * (parseInt(document.getElementById('investmodal').children[0].children[1].children[2].children[1].value)/100), 2, null, null)} M¢`
   window.investButton.amount = (window.batchSelfData.memeec.balance * (parseInt(document.getElementById('investmodal').children[0].children[1].children[2].children[1].value)/100)).toFixed(2).toLocaleString()
   if((window.batchSelfData.memeec.balance * (parseInt(document.getElementById('investmodal').children[0].children[1].children[2].children[1].value)/100)) < 100) {
     window.modal.children[0].children[1].children[3].style.opacity = "0.3"
@@ -386,7 +386,7 @@ var showUser = (e) => {
       }
     })
     formatChartUser(document.getElementsByClassName('modalleft')[1].children[2], parsedinvestments, data.reddit.name)
-    document.getElementsByClassName('balmodal')[1].innerText = data.memeec.balance.toLocaleString() + ".00 M¢"
+    document.getElementsByClassName('balmodal')[1].innerText = abbreviate(data.memeec.balance, 2, null, null) + "M¢"
     document.getElementsByClassName('balmodal')[2].innerText = data.firm.name
     var isInFirm = true
     if(document.getElementsByClassName('balmodal')[2].innerText == "") {
@@ -535,7 +535,7 @@ myEmitter.on('batchSelfData', (data, ws) => {
             <div class="memberinfowrapper">
               <pre class="memberinforank">${data.size} Members</pre>
               <pre class="memberinfoname">${data.name}</pre>
-              <pre class="memberinfobal">M¢ ${data.balance.toLocaleString()}.00</pre>
+              <pre class="memberinfobal">M¢ ${abbreviate(data.balance, 2, null, null)}.00</pre>
             </div>
             <div class="memberactionswrapper">
               <img class="memberactionicon" src="/home/promoteuser.svg" onclick="joinfirm(this.parentElement.parentElement.children[0].children[1].innerText)">
@@ -583,7 +583,7 @@ myEmitter.on('batchFirmUsers', (data, ws) => {
       <div class="memberinfowrapper">
         <pre class="memberinforank">${firm_role}</pre>
         <pre class="memberinfoname">${usr.name}</pre>
-        <pre class="memberinfobal">M¢ ${usr.balance.toLocaleString()}.00</pre>
+        <pre class="memberinfobal">M¢ ${abbreviate(usr.balance, 2, null, null)}.00</pre>
       </div>
       <div class="memberactionswrapper">
         <img class="memberactionicon" src="/home/kickuser.svg" onclick="kickuser(this.parentElement.parentElement.children[0].children[1].innerText)">
@@ -966,8 +966,8 @@ renderInvested = async () => {
               if(num > -1) {
                 c = "+"
               }
-              return c + num
-            })()}.0 M¢</pre>
+              return c + abbreviate(num, 2, null, null)
+            })()} M¢</pre>
           </div>
         </div>
       </div>`
@@ -989,7 +989,7 @@ renderInvested = async () => {
         })()}'></img>
         <div class="info">
           <div class="investmentinfo">
-            <pre class="inventmentinfo1">Invested ${investment.amount} M¢ at ${investment.upvotes} upvotes</pre>
+            <pre class="inventmentinfo1">Invested ${abbreviate(investment.amount, 2, null, null)} M¢ at ${investment.upvotes} upvotes</pre>
             <pre class="inventmentinfo2">$ ${(() => {
               if(investment.reddit) {
                 return (() => {
@@ -1013,7 +1013,7 @@ renderInvested = async () => {
                   if(num > -1) {
                     c = "+"
                   }
-                  return c + Math.round(num)
+                  return c + abbreviate(num, 2, null, null)
 
                 })()
               } else {
@@ -1066,8 +1066,8 @@ renderInvested = async () => {
                     if(num > -1) {
                       c = "+"
                     }
-                    return c + num
-                  })()}.0 M¢</pre>
+                    return c + abbreviate(num, 2, null, null)
+                  })()} M¢</pre>
                 </div>
               </div>
             </div>`
@@ -1077,7 +1077,7 @@ renderInvested = async () => {
               <img src='${res.preview.images[0].source.url}'></img>
               <div class="info">
                 <div class="investmentinfo">
-                  <pre class="inventmentinfo1">Invested ${investment.amount} M¢ at ${investment.upvotes} upvotes</pre>
+                  <pre class="inventmentinfo1">Invested ${abbreviate(investment.amount, 2, null, null)} M¢ at ${investment.upvotes} upvotes</pre>
                   <pre class="inventmentinfo2">$ ${(() => {
                     //get % relative
                     var c = ""
@@ -1093,7 +1093,7 @@ renderInvested = async () => {
                     if(num > -1) {
                       c = "+"
                     }
-                    return c + Math.round(num)
+                    return c + abbreviate(num, 2, null, null)
                   })()} M¢)</pre>
                 </div>
                 <div class="investmentinfotime">
