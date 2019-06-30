@@ -5,7 +5,7 @@ document.getElementById("login").addEventListener("click", async function (e) {
     "username": document.getElementById('usr').value,
     "password": document.getElementById('pwd').value
   }
-  var fetchObject = await fetch("https://webapi.dankbank.io:80/makeAccount?username=" + accountDetails.username + "&password=" + accountDetails.password + "&email=" + accountDetails.email)
+  var fetchObject = await fetch("https://webapi.dankbank.io/makeAccount?username=" + accountDetails.username + "&password=" + accountDetails.password + "&email=" + accountDetails.email)
   var res = await fetchObject.json();
   if(res.ERROR == -1) {
     document.location.search = "uuid=" + res.uuid
