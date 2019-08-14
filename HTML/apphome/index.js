@@ -1,26 +1,46 @@
-function abbreviate(number, maxPlaces, forcePlaces, forceLetter) {
-  number = Number(number)
-  forceLetter = forceLetter || false
-  if(forceLetter !== false) {
-    return annotate(number, maxPlaces, forcePlaces, forceLetter)
+function timeRemaining(a) {
+    var end = new Date();
+    end.setTime(a*1000);
+    end.setHours(end.getHours() + 4);
+
+    var diff = (end.getTime() - (new Date()).getTime()) / 1000; // ms to seconds
+    var hours = Math.floor(diff / 60 / 60);
+    var minutes = Math.floor((diff - (hours * 60 * 60)) / 60);
+    var seconds = Math.floor(diff - (hours * 60 * 60) - (minutes * 60));
+    return {
+        getHours: () => {return hours + 1},
+        getMinutes: () => {return minutes},
+        getSeconds: () => {return seconds}
+    }
+}
+
+function abbreviate(number, maxPlaces, forcePlaces, forceLetter, passthrough) {
+  if(passthrough) {
+    number = Number(number)
+    forceLetter = forceLetter || false
+    if(forceLetter !== false) {
+      return annotate(number, maxPlaces, forcePlaces, forceLetter)
+    }
+    var abbr
+    if(number >= 1e12) {
+      abbr = 'T'
+    }
+    else if(number >= 1e9) {
+      abbr = 'B'
+    }
+    else if(number >= 1e6) {
+      abbr = 'M'
+    }
+    else if(number >= 1e3) {
+      abbr = 'K'
+    }
+    else {
+      abbr = ''
+    }
+    return annotate(number, maxPlaces, forcePlaces, abbr)
+  } else {
+    return number.toLocaleString();
   }
-  var abbr
-  if(number >= 1e12) {
-    abbr = 'T'
-  }
-  else if(number >= 1e9) {
-    abbr = 'B'
-  }
-  else if(number >= 1e6) {
-    abbr = 'M'
-  }
-  else if(number >= 1e3) {
-    abbr = 'K'
-  }
-  else {
-    abbr = ''
-  }
-  return annotate(number, maxPlaces, forcePlaces, abbr)
 }
 
 function annotate(number, maxPlaces, forcePlaces, abbr) {
@@ -46,13 +66,13 @@ function annotate(number, maxPlaces, forcePlaces, abbr) {
   if(maxPlaces !== false) {
     var test = new RegExp('\\.\\d{' + (maxPlaces + 1) + ',}$')
     if(test.test(('' + rounded))) {
-      rounded = rounded.toFixed(2)
+      rounded = rounded
     }
   }
   if(forcePlaces !== false) {
     rounded = Number(rounded).toFixed(forcePlaces)
   }
-  return rounded + abbr
+  return rounded.toFixed(2) + abbr
 }
 
 function linear_interpolate(x, x_0, x_1, y_0, y_1){
@@ -284,7 +304,7 @@ document.getElementById('investmodal').children[0].children[1].children[2].child
   window.modal.children[0].children[1].children[2].children[0].innerText = "Invest amount: " + document.getElementById('investmodal').children[0].children[1].children[2].children[1].value + "%"
   window.investButton.precent = (document.getElementById('investmodal').children[0].children[1].children[2].children[1].value/100)
   window.modal.children[0].children[1].children[3].innerText = `Invest ${abbreviate(window.batchSelfData.memeec.balance * (parseInt(document.getElementById('investmodal').children[0].children[1].children[2].children[1].value)/100), 2, null, null)} M¢`
-  window.investButton.amount = (window.batchSelfData.memeec.balance * (parseInt(document.getElementById('investmodal').children[0].children[1].children[2].children[1].value)/100)).toFixed(2).toLocaleString()
+  window.investButton.amount = (window.batchSelfData.memeec.balance * (parseInt(document.getElementById('investmodal').children[0].children[1].children[2].children[1].value)/100)).toLocaleString()
   if((window.batchSelfData.memeec.balance * (parseInt(document.getElementById('investmodal').children[0].children[1].children[2].children[1].value)/100)) < 100) {
     window.modal.children[0].children[1].children[3].style.opacity = "0.3"
     window.investButton.canInvest = false
@@ -306,12 +326,12 @@ var invest = (e) => {
     throw new Error("Investment Not Found. Not Displaying Modal")
   } else {
     window.modal = document.getElementById('investmodal')
-    window.modal.children[0].children[1].children[0].children[2].innerText = window.batchSelfData.memeec.balance.toLocaleString() + ".00 M¢"
+    window.modal.children[0].children[1].children[0].children[2].innerText = window.batchSelfData.memeec.balance.toLocaleString() + " M¢"
     formatChart(window.modal.children[0].children[1].children[1], item.id)
     window.modal.children[0].children[2].children[0].src = item.preview.images[0].source.url
     window.modal.children[0].children[2].children[1].children[1].children[1].innerText = item.score
     window.modal.children[0].children[2].children[2].children[1].children[1].innerText = item.breakEven
-    window.modal.children[0].children[2].children[3].children[1].children[1].innerText = item.maxProfit
+    window.modal.children[0].children[2].children[3].children[1].children[1].innerText = item.maxProfit.toFixed(2)
     toggleinvestmodal();
   }
 }
@@ -499,8 +519,8 @@ myEmitter.on('batchSelfData', (data, ws) => {
   }
   window.batchSelfData = data
   document.getElementById('welcomeName').innerText = data.reddit.name
-  document.getElementById('memecoins').innerText = data.memeec.balance.toLocaleString() + ".00"
-  document.getElementById('memecoinsinvested').innerText = (data.memeec.networth - data.memeec.balance).toLocaleString() + ".00"
+  document.getElementById('memecoins').innerText = data.memeec.balance.toLocaleString() + ""
+  document.getElementById('memecoinsinvested').innerText = (data.memeec.networth - data.memeec.balance).toLocaleString() + ""
   document.getElementById('rank').innerText = data.memeec.rank.toLocaleString()
   document.getElementById('broke').innerText = data.memeec.broke.toLocaleString()
   document.getElementById('compInvestments').innerText = data.memeec.completed.toLocaleString()
@@ -535,7 +555,7 @@ myEmitter.on('batchSelfData', (data, ws) => {
             <div class="memberinfowrapper">
               <pre class="memberinforank">${data.size} Members</pre>
               <pre class="memberinfoname">${data.name}</pre>
-              <pre class="memberinfobal">M¢ ${abbreviate(data.balance, 2, null, null)}.00</pre>
+              <pre class="memberinfobal">M¢ ${abbreviate(data.balance, 2, null, null)}</pre>
             </div>
             <div class="memberactionswrapper">
               <img class="memberactionicon" src="/home/promoteuser.svg" onclick="joinfirm(this.parentElement.parentElement.children[0].children[1].innerText)">
@@ -552,8 +572,8 @@ myEmitter.on('batchSelfData', (data, ws) => {
       document.getElementsByClassName('frimmain')[0].children[0].innerHTML = `<div class="paper-investment"><div class="paper-firm-piechart-title"><pre class="paper-frim-piechart-title-text">Members</pre><pre class="paper-frim-piechart-title-range">Sorted by balance</pre> </div><div class="memberwrapper"></div> </div><div class="paper-investment"><div class="paper-firm-piechart-title"><pre class="paper-frim-piechart-title-text">Firm Settings</pre></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="/home/nextpayout.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Next payout</pre><pre class="firmsettingval">M¢ ...</pre></div></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="/home/members.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Members</pre><pre class="firmsettingval">... members</pre></div></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="/home/tax.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Tax</pre><pre class="firmsettingval">...%</pre></div></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="/home/visibility.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Visibility</pre><pre class="firmsettingval">...</pre></div></div><div class="firmsetting"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="/home/level.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext">Level</pre><pre class="firmsettingval">...</pre></div></div><div class="firmsetting" id="leavefirm" onclick="leavefirm()"><div class="firmsettingiconwrap"><img class="firmsettingicon" src="/home/leave0.svg"></div><div class="firmsettingtextwrap"><pre class="firmsettingtext leavefirmtext">Leave</pre><pre class="firmsettingval leavefirmtext">Leave Firm</pre></div></div></div>`
     } else {}
     document.getElementsByClassName('paper-firminfo-firmname')[0].innerText = data.firm.name
-    document.getElementsByClassName('paper-firminfo-firmcoin')[0].innerText = `F¢ ${data.firm.balance.toLocaleString()}.00`
-    document.getElementsByClassName('firmsettingval')[0].innerText = "M¢ " + abbreviate(data.firm.balance, 2, false, false)
+    document.getElementsByClassName('paper-firminfo-firmcoin')[0].innerText = `F¢ ${data.firm.balance.toLocaleString()}`
+    document.getElementsByClassName('firmsettingval')[0].innerText = "M¢ " + abbreviate(data.firm.balance, 2, false, false, true)
     document.getElementsByClassName('firmsettingval')[1].innerText = batchSelfData.firm.size + " members"
     document.getElementsByClassName('firmsettingval')[2].innerText = batchSelfData.firm.tax + "%"
     document.getElementsByClassName('firmsettingval')[3].innerText = batchSelfData.firm.private ? "Private" : "Public"
@@ -583,7 +603,7 @@ myEmitter.on('batchFirmUsers', (data, ws) => {
       <div class="memberinfowrapper">
         <pre class="memberinforank">${firm_role}</pre>
         <pre class="memberinfoname">${usr.name}</pre>
-        <pre class="memberinfobal">M¢ ${abbreviate(usr.balance, 2, null, null)}.00</pre>
+        <pre class="memberinfobal">M¢ ${abbreviate(usr.balance, 2, null, null)}</pre>
       </div>
       <div class="memberactionswrapper">
         <img class="memberactionicon" src="/home/kickuser.svg" onclick="kickuser(this.parentElement.parentElement.children[0].children[1].innerText)">
@@ -809,7 +829,7 @@ setInterval(() => {
         if(updateObject.newScore) {
           window.selectedInvestment.num_comments = updateObject.newScore
 
-          var maxProfit = C(updateObject.newScore, 100000000000000000000).toFixed(2)
+          var maxProfit = C(updateObject.newScore, 100000000000000000000)
           var breakEven = "Error!"
           var found = false;
           for(var i = 0; !found; i++) {
@@ -824,7 +844,7 @@ setInterval(() => {
 
           document.getElementsByClassName("modalrightval")[0].innerText = updateObject.newScore
           document.getElementsByClassName("modalrightval")[1].innerText = breakEven
-          document.getElementsByClassName("modalrightval")[2].innerText = maxProfit
+          document.getElementsByClassName("modalrightval")[2].innerText = maxProfit.toFixed(2)
         }
       }
 
@@ -842,7 +862,7 @@ setInterval(() => {
           }
           if(updateObject.newScore) {
             window.investIn[index].score = updateObject.newScore
-            window.investIn[index].maxProfit = C(window.investIn[index].score, 100000000000000000000).toFixed(2)
+            window.investIn[index].maxProfit = C(window.investIn[index].score, 100000000000000000000)
             var found = false;
             for(var i = 0; !found; i++) {
               if(C(window.investIn[index].score, i).toFixed(1) == 1) {
@@ -851,7 +871,7 @@ setInterval(() => {
               }
             }
           }
-          item.children[2].children[0].children[0].innerText = `${window.investIn[index].breakEven} Upvotes to break even, ${window.investIn[index].maxProfit}x Max profit.`
+          item.children[2].children[0].children[0].innerText = `${window.investIn[index].breakEven} Upvotes to break even, ${window.investIn[index].maxProfit.toFixed(2)}x Max profit.`
           item.children[2].children[0].children[1].innerText = `${window.investIn[index].score} Upvotes. ${window.investIn[index].num_comments} Comments.`
           if(window.charts[updateObject.id]) {
             var now = new Date()
@@ -882,7 +902,7 @@ renderInvestIn = () => {
   </a>
   <div class="info">
     <div class="investmentinfo">
-      <pre class="inventmentinfo1">${upvotesToBreakEven} Upvotes to break even, ${maxProfit}x Max profit.</pre>
+      <pre class="inventmentinfo1">${upvotesToBreakEven} Upvotes to break even, ${maxProfit.toFixed(2)}x Max profit.</pre>
       <pre class="inventmentinfo2">${upvotes} Upvotes. ${comments} Comments.</pre>
     </div>
     <div class="investmentbuttonwrap">
@@ -894,7 +914,7 @@ renderInvestIn = () => {
 var batchAdd = ""
   window.investIn.forEach((item, index) => {
     try {
-      item.maxProfit = C(item.score, 100000000000000000000).toFixed(2)
+      item.maxProfit = C(item.score, 100000000000000000000)
       var found = false;
       for(var i = 0; !found; i++) {
         if(C(item.score, i).toFixed(1) == 1) {
@@ -945,7 +965,7 @@ renderInvested = async () => {
         })()}'></img>
         <div class="info">
           <div class="investmentinfo">
-            <pre class="inventmentinfo2">Ended with ${investment.final_upvotes} (${(() => {
+            <pre class="inventmentinfo2">${investment.final_upvotes} (${(() => {
               var c = ""
               var num = investment.final_upvotes - investment.upvotes
               if(num > -1) {
@@ -999,7 +1019,7 @@ renderInvested = async () => {
                   if(num > -1) {
                     c = "+"
                   }
-                  return c + (num).toFixed(2)
+                  return c + (num)
                 })()
               } else {
                 return "..."
@@ -1023,7 +1043,7 @@ renderInvested = async () => {
           </div>
           <div class="investmentinfotime">
             <pre class="investmenttime">${(() => {
-              var timeDifference = new Date((14400000 - (Date.now() - (investment.time * 1000))))
+              var timeDifference = timeRemaining(investment.time)
               return String(timeDifference.getHours() - 1).padStart(2, "0")+":"+String(timeDifference.getMinutes()).padStart(2, "0")
             })()}<img style="width: 20px;height: 20px;position: relative;top: 9px;margin: 5px;" src="/home/clock.svg"></img></pre>
           </div>
@@ -1045,7 +1065,7 @@ renderInvested = async () => {
               <img src='${res.preview.images[0].source.url}'></img>
               <div class="info">
                 <div class="investmentinfo">
-                  <pre class="inventmentinfo2">Ended with ${investment.final_upvotes} (${(() => {
+                  <pre class="inventmentinfo2">${investment.final_upvotes} (${(() => {
                     var c = ""
                     var num = investment.final_upvotes - investment.upvotes
                     if(num > -1) {
@@ -1085,7 +1105,7 @@ renderInvested = async () => {
                     if(num > -1) {
                       c = "+"
                     }
-                    return c + num.toFixed(2)
+                    return c + num
                   })()}% (${(() => {
                     //get bal relative
                     var c = ""
@@ -1098,7 +1118,7 @@ renderInvested = async () => {
                 </div>
                 <div class="investmentinfotime">
                   <pre class="investmenttime">${(() => {
-                    var timeDifference = new Date((14400000 - (Date.now() - (investment.time * 1000))))
+                    var timeDifference = timeRemaining(investment.time)
                     return String(timeDifference.getHours() - 1).padStart(2, "0")+":"+String(timeDifference.getMinutes()).padStart(2, "0")
                   })()}<img style="width: 20px;height: 20px;position: relative;top: 9px;margin: 5px;" src="/home/clock.svg"></img></pre>
                 </div>

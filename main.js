@@ -29,6 +29,7 @@ global.posthistory = {}
 app.use(function(req, res, next){
   req.headers.host = (req.headers.host.split(".dev.localhost").join(""))
   req.url = req.headers.host + req.url;
+  req.url = req.url.split("www.").join("")
   next();
 });
 
@@ -57,6 +58,10 @@ app.get('dankbank.io/homepostload.js', (req, res) => {
 app.get('dankbank.io/CDN/logo_outline.png', (req, res) => {
   res.type('.png')
   res.send(fs.readFileSync(__dirname + "/CDN/logo_outline.png"))
+})
+app.get('dankbank.io/downloadWindows', (req,res) => {
+  res.set('Content-Disposition','attachment; filename="dankbankDesktop.zip"')
+  res.send(fs.readFileSync(__dirname + "/dankbank-desktop-win32-x64.zip"))
 })
 app.get('dankbank.io/settings', (req, res) => {
   res.type('.html')
@@ -89,6 +94,10 @@ app.get('dankbank.io/CDN/appstore.svg', (req, res) => {
 app.get('dankbank.io/CDN/earth.svg', (req, res) => {
   res.type('.svg')
   res.send(fs.readFileSync(__dirname + "/CDN/earth.svg"))
+})
+app.get('dankbank.io/CDN/discord.svg', (req, res) => {
+  res.type('.svg')
+  res.send(fs.readFileSync(__dirname + "/CDN/discord.svg"))
 })
 app.get('dankbank.io/CDN/windows.png', (req, res) => {
   res.type('.png')
@@ -215,6 +224,14 @@ app.get('web.dankbank.io/home', (req, res) => {
 app.get('web.dankbank.io/home/index.css', (req, res) => {
   res.type('.css')
   res.send(fs.readFileSync(__dirname + "/HTML/apphome/index.css", 'utf-8'))
+})
+app.get('dankbank.io/app/privacypolicy', (req, res) => {
+  res.type('.html')
+  res.send(fs.readFileSync(__dirname + "/HTML/privacypolicy.html", 'utf-8'))
+})
+app.get('dankbank.io/app/terms', (req, res) => {
+  res.type('.html')
+  res.send(fs.readFileSync(__dirname + "/HTML/privacypolicy.html", 'utf-8'))
 })
 app.get('web.dankbank.io/home/index.js', (req, res) => {
   res.type('.js')
@@ -393,10 +410,10 @@ wss.clients
 
 const options = {
   userAgent: "Checker for DankBank Desktop / Server",
-  clientSecret: "vior6LJQ2kkQwp6SS9GRxdyKuV8",
-  clientId: "N29L0e4LMXnJLA",
+  clientSecret: "I5PsJCp2hXmghO-ldXZUqCk0ta0",
+  clientId: "tsNq_qz3BO7YcA",
   username: "SoLoDas",
-  password: "rowanfully"
+  password: "Rowanfu11y"
 };
 console.log(chalk.green("S -R> R"), chalk.blue(`authenticate('${"SoLoDas" + " : " + "rowanfully"}')`))
 global.gr = new snoowrap(options);

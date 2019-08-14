@@ -1,4 +1,4 @@
-document.getElementById('accclick').addEventListener('click', () => {
+/*document.getElementById('accclick').addEventListener('click', () => {
   if(document.getElementsByClassName('paperAccountSettings')[0].style.opacity == "0") {
     document.getElementsByClassName('paperAccountSettings')[0].style.opacity = "1"
   } else {
@@ -20,7 +20,7 @@ var settingclicked = (setting) => {
     default:
       alert('I dunno how but you broke it')
   }
-}
+}*/
 
 var appledevwarn = () => {
   Swal.fire({
@@ -32,3 +32,20 @@ var appledevwarn = () => {
     cancelButtonText: 'No Thanks.'
   })
 }
+
+window.addEventListener("resize", () => {
+  c();
+});
+
+var c = () => {
+  Array.from(document.styleSheets, (ss) => {
+    try {
+    	(ss.rules[1].style.setProperty('--wid', Math.floor(window.innerWidth/394)*394 + "px"))
+      (ss.rules[1].style.setProperty('--hei', Math.ceil(7/Math.floor(window.innerWidth/394))*124 + "px"))
+    } catch(err) {
+
+    }
+  })
+}
+
+c();

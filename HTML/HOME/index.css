@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Google+Sans:100,300,400,500,700,900,100i,300i,400i,500i,700i,900i");
 * {
+  --wid: 394px;
+  --hei: 744px;
   border: 0px;
   margin: 0px;
   font-family: "Google Sans", sans-serif;
@@ -57,30 +59,19 @@ nav {
 .documentTitle {
   font-size: 8vh;
   text-align: center;
-  margin-top: 6vh;
+  margin-top: 4vh;
 }
 .documentSubTitle {
   text-align: center;
-  font-size: 4vh;
-  margin-bottom: 6vh;
+  font-size: 3vh;
+  margin-bottom: 4vh;
 }
 .screenshots {
-  width: 50vw;
-  float: left;
-}
-.cn {
-  position: relative;
-  width: 50vw;
-  height: calc(100vh - 95px);
+  width: 60vw;
+  margin-left: 20vw;
+  margin-top: 5vw;
 }
 
-.inner {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  width: 50vw;
-  height: auto;
-}
 #devices {
   width: 100%
 }
@@ -120,27 +111,16 @@ nav {
   font-size: 22px;
 }
 .topLayerText {
-  position: absolute;
-  right: 0px;
-  top: 95px;
-  height: calc(100vh - 95px);
+  width: 100vw;
+  margin-top: 10vh;
+  height: var(--hei);
 }
 .trydankbanktext {
-  background-color: rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  padding: 10px;
-  font-size: 64px;
-  width: 500px;
-  margin: 50px;
+  width: 100vw;
 }
-.cn2 {
-  position: absolute;
-  top: 50%;
-  left: -25vw;
-  transform: translate(-50%,-50%);
-  width: 50vw;
-  height: auto;
+.trydankbanktextsub {
+  width: 100vw;
+  font-style: italic;
 }
 .applink {
   margin: 10px;
@@ -168,7 +148,7 @@ nav {
   font-size: 42px;
 }
 .applinkwrapper {
-  width: 788px;
+  width: var(--wid);
 }
 .applinkwrapper > * {
   float: left;
@@ -176,4 +156,20 @@ nav {
 
 .swaltitle, .swalbody, .swalbody > * {
   color: #000;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.8);
 }
