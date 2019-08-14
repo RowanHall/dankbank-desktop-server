@@ -437,7 +437,26 @@ var aaz = () => {
     data = formatData(data)
 
     if(global.olddata) {
-
+      Object.keys(global.olddata).forEach((oldkey, oldkeyindex) => {
+        if(!(data[oldkey])) {
+          //we know post; global.olddata[oldkey] has either been deleted, or is no longer being monitored.
+          //we can check which one it is by checking the index of oldkey, if it is greater than 950
+          //we can safely assume that it is no loger being monitored and has fallen below the 1000 post
+          //gradeint.
+         
+          if(oldkeyindex < 950) {
+            //we know the post is deleted. we can now safely send out the deleted event.
+           
+            wss.clients.forEach(ws => {
+              ws.send(JSON.stringify({
+                "type": "submissionRemoved",
+                "data": global.olddata[oldkey]
+              }))
+            })
+            
+          }
+        }
+      })
       Object.keys(data).forEach(newkey => {
         var neww = data[newkey];
 
